@@ -15,12 +15,20 @@ app.use(
 );
 
 app.use("/api", ApiRoutes);
+// const mySqlConnection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "isg@123##",
+//   database: "JokaAuth",
+//   port: 3306,
+//   multipleStatements: true,
+// });
+
 const mySqlConnection = mysql.createConnection({
-  host: "ec2-43-204-240-96.ap-south-1.compute.amazonaws.com",
+  host: "localhost",
   user: "root",
-  password: "isg@123##",
+  password: "1234567890",
   database: "JokaAuth",
-  port: 3306,
   multipleStatements: true,
 });
 
