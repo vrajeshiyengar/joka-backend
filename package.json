@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js --watch >> log.txt 2>> log.txt",
-    "check-active": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
+    "check": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
     "stop": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}')",
     "restart": "npm stop && npm start",
     "logs": "vim log.txt"
