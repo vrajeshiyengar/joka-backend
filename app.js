@@ -15,22 +15,22 @@ app.use(
 );
 
 app.use("/api", ApiRoutes);
-// const mySqlConnection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "isg@123##",
-//   database: "JokaAuth",
-//   port: 3306,
-//   multipleStatements: true,
-// });
-
 const mySqlConnection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1234567890",
+  password: "isg@123##",
   database: "JokaAuth",
+  port: 3306,
   multipleStatements: true,
 });
+
+// const mySqlConnection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "1234567890",
+//   database: "JokaAuth",
+//   multipleStatements: true,
+// });
 
 mySqlConnection.connect((err) => {
   if (!err) {
