@@ -51,25 +51,23 @@ module.exports = {
         pad(date.getMonth() + 1) +
         "-" +
         pad(date.getDate()) +
-        "T" +
+        " " +
         pad(date.getHours()) +
         ":" +
         pad(date.getMinutes()) +
         ":" +
-        pad(date.getSeconds()) +
-        "Z",
+        pad(date.getSeconds()),
       expiryDate.getFullYear() +
         "-" +
         pad(expiryDate.getMonth() + 1) +
         "-" +
         pad(expiryDate.getDate()) +
-        "T" +
+        " " +
         pad(expiryDate.getHours()) +
         ":" +
         pad(expiryDate.getMinutes()) +
         ":" +
-        pad(expiryDate.getSeconds()) +
-        "Z",
+        pad(expiryDate.getSeconds()),
     ];
   },
 };
