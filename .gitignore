@@ -1,4 +1,6 @@
 # Logs
+log.txt
+nohup.out
 logs
 *.log
 npm-debug.log*
