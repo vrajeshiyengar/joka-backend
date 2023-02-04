@@ -175,6 +175,4 @@ class LdapDataService {
     }
 }
 
-module.exports = {
-    LdapDataService
-};
+module.exports = new LdapDataService();

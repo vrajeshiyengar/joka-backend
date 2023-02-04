@@ -4,24 +4,21 @@
  *  
 */
 
-const { LdapDataService } = require('./ldap-data-service/ldap-data-service');
+const ldapDataService = require('./ldap-data-service/ldap-data-service');
 const ldapUtils = require("../../utils/ldap-utils");
 const values = require('../../constants/values');
 
 class LdapService {
-    constructor() {
-        this.dataService = new LdapDataService();
-    }
 
     async authenticateUser(username, password) {
         const filter = `cn=${username}`;
-        const users = await this.dataService.search(filter, [values.LDAP.DN, values.LDAP.CN, values.LDAP.EMAIL, values.LDAP.DISPLAY_NAME]);
+        const users = await ldapDataService.search(filter, [values.LDAP.DN, values.LDAP.CN, values.LDAP.EMAIL, values.LDAP.DISPLAY_NAME]);
         if (users.length === 0) return { status: false, message: values.ERROR.INVALID_USER_ID }
         if (users.length > 1) return { status: false, message: values.ERROR.USER_ID_NOT_UNIQUE } // Should never happen
 
         const dn = users[0].dn;
         const hashedPassword = ldapUtils.generateHashedPassword(password);
-        var result = await this.dataService.compare(dn, values.LDAP.PASSWORD, hashedPassword)
+        var result = await ldapDataService.compare(dn, values.LDAP.PASSWORD, hashedPassword)
         if (!result) return { status: false, message: values.ERROR.INVALID_CREDENTIALS }
 
         let attributes = {
@@ -46,7 +43,7 @@ class LdapService {
 
     async searchUserForPasswordReset(username) {
         const filter = `cn=${username}`;
-        const users = await this.dataService.search(filter, [values.LDAP.DN]);
+        const users = await ldapDataService.search(filter, [values.LDAP.DN]);
 
         if (users.length === 0) return { status: false, message: values.ERROR.INVALID_USER_ID }
         if (users.length > 1) return { status: false, message: values.ERROR.USER_ID_NOT_UNIQUE } // Should never happen
@@ -57,7 +54,7 @@ class LdapService {
     async updateUserPassword(username, password, dn = undefined) {
         if (!dn) {
             const filter = `cn=${username}`;
-            const users = await this.dataService.search(filter, [values.LDAP.DN]);
+            const users = await ldapDataService.search(filter, [values.LDAP.DN]);
             if (users.length === 0) return { status: false, message: values.ERROR.INVALID_USER_ID }
             if (users.length > 1) return { status: false, message: values.ERROR.USER_ID_NOT_UNIQUE } // Should never happen
 
@@ -69,7 +66,7 @@ class LdapService {
         try {
             let modifications = {};
             modifications[values.LDAP.PASSWORD] = hashedPassword;
-            await this.dataService.modify(dn, modifications);
+            await ldapDataService.modify(dn, modifications);
             console.log(`Password was updated for ${username}`)
             return { status: true, message: values.INFO.PASSWORD_RESET_DONE }
         } catch (err) {
@@ -82,6 +79,4 @@ class LdapService {
     async updateUserData() { }
 }
 
-module.exports = {
-    LdapService
-};
+module.exports = new LdapService();

@@ -2,10 +2,9 @@ const express = require("express");
 const utils = require("../utils/utils");
 const connection = require("../services/mysql/mysql-connection");
 const dbHelper = require("../services/mysql/db-helper");
-const {LdapService} = require('../services/ldap/ldap-service');
+const ldapService = require('../services/ldap/ldap-service');
 
 const Router = express.Router();
-const ldapService = new LdapService();
 
 Router.post("/login", (req, res) => {
   console.log("/api/login hit...", req.body);
