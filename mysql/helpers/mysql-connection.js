@@ -15,7 +15,19 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  timezone: "+05:30",
   multipleStatements: true,
+});
+
+connection.connect((err) => {
+  if (!err) {
+    console.log("JokaAuth DB connection established");
+  } else {
+    console.log("JokaAuth DB connection failed!");
+    console.log("\tError code: ", err.code);
+    console.log("\tError message: ", err.sqlMessage);
+    console.log("\tFatal: ", err.fatal);
+  }
 });
 
 module.exports = connection;

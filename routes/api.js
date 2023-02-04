@@ -1,10 +1,13 @@
 const express = require("express");
 const utils = require("../utils/utils");
-const connection = require("../mysql-connection");
+const connection = require("../mysql/helpers/mysql-connection");
+const dbHelper = require("../mysql/helpers/db-helper");
+
 const Router = express.Router();
 
 Router.post("/login", (req, res) => {
   console.log("/api/login hit...", req.body);
+  dbHelper.refreshAccessTokens(connection);
   if (!req.body.username) {
     res.status(500).json({
       status: 500,
@@ -33,52 +36,67 @@ Router.post("/login", (req, res) => {
             message: cas_data.authentication_exceptions,
           });
         } else if (cas_data.authentication) {
-          const ts = utils.getTimeStamps();
+          const ts = utils.getTimeStamps(true);
           const at = utils.generateToken(100);
-          let loginResponse = {
-            status: 200,
-            id: cas_data.authentication.principal.id,
-            access_token: at,
-            email: cas_data.authentication.principal.attributes.mail[0],
-            attributes: cas_data.authentication.principal.attributes,
-            created: ts[0],
-            expiry: ts[1],
-          };
-
-          connection.connect((err) => {
-            if (!err) {
-              console.log("JokaAuth DB connection established :::: /api/login");
+          dbHelper.getByUserId(
+            connection,
+            cas_data.authentication.principal.id,
+            (result) => {
+              let loginObj = {};
               if (req.body.cas == 1) {
-                loginResponse.cas_data = cas_data;
+                loginObj.cas_data = cas_data;
               }
-              var sql = `INSERT INTO AccessToken (access_token, user_id, email, created, expiry) VALUES ("${loginResponse.access_token}", "${loginResponse.id}", "${loginResponse.email}", "${loginResponse.created}", "${loginResponse.expiry}")`;
-              connection.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(
-                  "1 record inserted in JokaAuth.AccessToken",
-                  result
-                );
-                res.json(loginResponse);
-              });
-            } else {
-              console.log("JokaAuth DB connection failed!");
-              console.log("\tError code: ", err.code);
-              console.log("\tError message: ", err.sqlMessage);
-              console.log("\tFatal: ", err.fatal);
-              res.json({
-                status: 500,
-                error: "Server Error",
-                message:
-                  "The server failed to connect to the database. Kindly try in some time or contact ISG if the problem persists.",
-              });
+              if (result) {
+                loginObj = { ...loginObj, ...result };
+                res.json(loginObj);
+              } else {
+                loginObj = {
+                  access_token: at,
+                  user_id: cas_data.authentication.principal.id,
+                  email: cas_data.authentication.principal.attributes.mail[0],
+                  created: ts[0],
+                  expiry: ts[1],
+                };
+                dbHelper.insertAccessToken(connection, loginObj, (result) => {
+                  res.json(result);
+                });
+              }
             }
-          });
+          );
         }
       })
       .catch((error) => {
         console.log("error", error);
         res.send(error);
       });
+  }
+});
+
+Router.post("/verifyAccessToken", (req, res) => {
+  console.log("/api/verifyAccessToken hit...", req.body);
+  dbHelper.refreshAccessTokens(connection);
+  if (!req.body.access_token) {
+    res.status(500).json({
+      status: 500,
+      error: "No access_token provided",
+      message: "Please provide an access_token",
+    });
+  } else {
+    // dbHelper.getAllAccessTokens(connection, (results) => {
+    //   res.json(results);
+    // });
+    // return;
+    dbHelper.getByAccessToken(connection, req.body.access_token, (result) => {
+      if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
+        res.json(result);
+      } else {
+        res.json({
+          status: 401,
+          error: "Invalid access token",
+          message: "access_token invalid or expired",
+        });
+      }
+    });
   }
 });
 
