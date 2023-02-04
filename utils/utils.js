@@ -30,8 +30,10 @@ module.exports = {
     return token;
   },
   getTimeStamps(
+    returnExpiry = false,
     date = new Date(),
-    expiryMilliseconds = 1000 * 20 // 20 seconds
+    // expiryMilliseconds = 1000 * 20 // 20 seconds
+    expiryMilliseconds = 1000 * 60 * 5 // 5 minutes
     // expiryMilliseconds = 1000 * 60 * 60 // 1 hour
     // expiryMilliseconds = 1000 * 60 * 60 * 24 // 1 day
     // expiryMilliseconds = 1000 * 60 * 60 * 24 * 3 // 3 days
@@ -44,32 +46,44 @@ module.exports = {
     expiryDate.setMilliseconds(
       expiryDate.getMilliseconds() + expiryMilliseconds
     );
-
-    return [
-      date.getFullYear() +
-        "-" +
-        pad(date.getMonth() + 1) +
-        "-" +
-        pad(date.getDate()) +
-        "T" +
-        pad(date.getHours()) +
-        ":" +
-        pad(date.getMinutes()) +
-        ":" +
-        pad(date.getSeconds()) +
-        "Z",
-      expiryDate.getFullYear() +
-        "-" +
-        pad(expiryDate.getMonth() + 1) +
-        "-" +
-        pad(expiryDate.getDate()) +
-        "T" +
-        pad(expiryDate.getHours()) +
-        ":" +
-        pad(expiryDate.getMinutes()) +
-        ":" +
-        pad(expiryDate.getSeconds()) +
-        "Z",
-    ];
+    return returnExpiry
+      ? [
+          date.getFullYear() +
+            "-" +
+            pad(date.getMonth() + 1) +
+            "-" +
+            pad(date.getDate()) +
+            "T" +
+            pad(date.getHours()) +
+            ":" +
+            pad(date.getMinutes()) +
+            ":" +
+            pad(date.getSeconds()) +
+            "Z",
+          expiryDate.getFullYear() +
+            "-" +
+            pad(expiryDate.getMonth() + 1) +
+            "-" +
+            pad(expiryDate.getDate()) +
+            "T" +
+            pad(expiryDate.getHours()) +
+            ":" +
+            pad(expiryDate.getMinutes()) +
+            ":" +
+            pad(expiryDate.getSeconds()) +
+            "Z",
+        ]
+      : date.getFullYear() +
+          "-" +
+          pad(date.getMonth() + 1) +
+          "-" +
+          pad(date.getDate()) +
+          "T" +
+          pad(date.getHours()) +
+          ":" +
+          pad(date.getMinutes()) +
+          ":" +
+          pad(date.getSeconds()) +
+          "Z";
   },
 };

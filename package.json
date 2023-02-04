@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js --watch",
-    "restart": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}') && node app.js --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js --watch >> log.txt 2>> log.txt",
+    "check": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
+    "logs": "watch tail -n 50 log.txt",
+    "stop": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}')",
+    "restart": "npm stop && npm start"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,7 @@
   "homepage": "https://github.com/vrajeshiyengar/joka-auth-node#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.7",
     "mysql": "^2.18.1",
