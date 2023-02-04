@@ -8,7 +8,6 @@ module.exports = {
       if (result.length) {
         const now = utils.getTimeStamps();
         result.forEach((x) => {
-          console.log(x.expiry, now, x.expiry <= now);
           if (x.expiry <= now) {
             const deleteSql = `DELETE FROM AccessToken WHERE access_token = '${x.access_token}'`;
             connection.query(deleteSql, function (err, result) {
