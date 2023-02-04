@@ -46,7 +46,6 @@ module.exports = {
     expiryDate.setMilliseconds(
       expiryDate.getMilliseconds() + expiryMilliseconds
     );
-    console.log(date);
     return returnExpiry
       ? [
           date.getFullYear() +
