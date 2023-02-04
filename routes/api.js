@@ -1,7 +1,7 @@
 const express = require("express");
 const utils = require("../utils/utils");
-const connection = require("../mysql/helpers/mysql-connection");
-const dbHelper = require("../mysql/helpers/db-helper");
+const connection = require("../services/mysql/mysql-connection");
+const dbHelper = require("../services/mysql/db-helper");
 
 const Router = express.Router();
 
