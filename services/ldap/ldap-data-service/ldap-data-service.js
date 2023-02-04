@@ -134,7 +134,7 @@ class LdapDataService {
 
             self.client.compare(dn, attribute, value, (err, res) => {
                 if (err) {
-                    reject(err.message);
+                    reject(err);
                 } else {
                     resolve(res);
                 }
@@ -149,6 +149,7 @@ class LdapDataService {
         // bind if not bound
         await self.bindDN();
 
+        // Creating array of change objects for each modification
         Object.keys(modifications).forEach(key => {
             const modification = {};
             modification[key] = modifications[key];
@@ -165,7 +166,7 @@ class LdapDataService {
 
             self.client.modify(dn, changes, (err) => {
                 if (err) {
-                    reject(err.message);
+                    reject(err);
                 } else {
                     resolve();
                 }

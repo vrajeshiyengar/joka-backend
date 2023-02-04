@@ -44,7 +44,29 @@ class LdapService {
     }
     async searchUsersForJD() { }
     async searchUserForPasswordReset() { }
-    async updateUserPassword(username, password) { }
+
+    async updateUserPassword(username, password) {
+        const filter = `cn=${username}`;
+        const users = await this.dataService.search(filter, [values.LDAP.DN]);
+        if (users.length === 0) return { status: false, message: values.ERROR.INVALID_USER_ID }
+        if (users.length > 1) return { status: false, message: values.ERROR.USER_ID_NOT_UNIQUE } // Should never happen
+
+        const dn = users[0].dn;
+        const hashedPassword = ldapUtils.generateHashedPassword(password);
+        
+        try {
+            let modifications = {};
+            modifications[values.LDAP.PASSWORD] = hashedPassword;
+            await this.dataService.modify(dn, modifications);
+            console.log(`Password was updated for ${username}`)
+            return { status: true, message: values.INFO.PASSWORD_RESET_DONE }
+        } catch (err) {
+            if (!err.message) err.message = values.ERROR.PASSWORD_RESET_NOT_DONE
+            console.log(`Password was not updated for ${username}. Message: ${err.message}`)
+            return {status: false, message: err.message}
+        }
+    }
+
     async updateUserData() { }
 }
 
