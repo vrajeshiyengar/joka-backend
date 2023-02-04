@@ -6,7 +6,8 @@ module.exports = {
         PASSWORD_RESET_NOT_DONE: "Your Password could not be updated"
     },
     INFO: {
-        PASSWORD_RESET_DONE: "Your Password has been updated"
+        PASSWORD_RESET_DONE: "Your Password has been updated",
+        USER_ID_EXISTS: "User ID exists"
     },
     LDAP: {
         SN: "sn",
