@@ -3,11 +3,17 @@ module.exports = {
         INVALID_USER_ID: "Invalid User ID",
         USER_ID_NOT_UNIQUE: "User ID is not unique",
         INVALID_CREDENTIALS: "Invalid Credentials",
-        PASSWORD_RESET_NOT_DONE: "Your Password could not be updated"
+        PASSWORD_RESET_NOT_DONE: "Your Password could not be updated",
+        INVALID_SEARCH_TYPE: "Invalid Search Type",
+        USER_NOT_FOUND: "User Not Found",
+        USER_DN_MISSING: "User Identifier Missing",
+        EDIT_PROFILE_ACCESS_MISSING: "Editing this profile is not allowed",
+        USER_ID_MISMATCH: "Logged-in user is different"
     },
     INFO: {
         PASSWORD_RESET_DONE: "Your Password has been updated",
-        USER_ID_EXISTS: "User ID exists"
+        USER_ID_EXISTS: "User ID exists",
+        USER_DATA_UPDATED: "User data has been updated"
     },
     LDAP: {
         SN: "sn",
@@ -15,6 +21,40 @@ module.exports = {
         DN: "dn",
         EMAIL: "mail",
         CN: "cn",
-        DISPLAY_NAME: "displayName"
+        DISPLAY_NAME: "displayName",
+        REG_NO: "regno",
+        ALT_EMAIL: "altemail",
+        MOBILE: "mobile",
+        ROOM_NO: "roomnumber",
+        HOSTEL: "hostel",
+        COMPANY: "company",
+        BATCH: "batch",
+        OFFICE_CITY: "officecity",
+        HOME_CITY: "homecity",
+    },
+    JD: {
+        NAME: "NAME",
+        REG_NO: "REG_NO",
+        EMAIL: "EMAIL",
+        ALT_EMAIL: "ALT_EMAIL",
+        MOBILE: "MOBILE",
+        ROOM_NO: "MOBILE",
+        HOSTEL: "HOSTEL",
+        COMPANY: "COMPANY",
+        BATCH: "BATCH",
+        OFFICE_CITY: "OFFICE_CITY",
+        HOME_CITY: "HOME_CITY",
+        PGP_LABEL: "PGP",
+        PGPEX_LABEL: "PGPEX",
+        FP_LABEL: "FP",
+        FACULTY_STAFF_TTA_LABEL: "FACULTY/STAFF/TTA",
+        ALUMNI_LABEL: "ALUMNI",
+        PGDBA_LABEL: "PGDBA",
+        PGPEX_LC: "pgpex", //LC stands for Lower Case
+        FP_LC: "fp",
+        ALUMNI_LC: "alumni",
+        PGDBA_LC: "pgdba",
+        UI_GROUP: "UI_GROUP",
+        EDIT_PROFILE_ACCESS: "EDIT_PROFILE_ACCESS"
     }
 };

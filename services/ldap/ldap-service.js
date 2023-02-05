@@ -29,18 +29,6 @@ class LdapService {
         return { status: result, attributes: attributes }
     }
 
-    async searchUser() {
-        // const users = await this.dataService.search('dob=*')
-        // console.log(users.length)
-        // const users2 = await this.dataService.search('employeeNumber=*')
-        // console.log(users2.length)
-        // const users3 = await this.dataService.search('employeeType=*')
-        // console.log(users3.length)
-        // const users4 = await this.dataService.search('designation=*')
-        // console.log(users4.length)
-    }
-    async searchUsersForJD() { }
-
     async searchUserForPasswordReset(username) {
         const filter = `cn=${username}`;
         const users = await ldapDataService.search(filter, [values.LDAP.DN]);
@@ -75,8 +63,6 @@ class LdapService {
             return { status: false, message: err.message }
         }
     }
-
-    async updateUserData() { }
 }
 
 module.exports = new LdapService();
