@@ -37,6 +37,7 @@ class JDService {
     async searchUsers(searchValue, searchType, loggedInUserId = undefined) {
         let filter = '';
         searchValue = searchValue.trim();
+        searchType = searchType.toUpperCase();
 
         if (searchType == values.JD.NAME) {
             filter = `${values.LDAP.DISPLAY_NAME}=${searchValue}*`
@@ -60,6 +61,8 @@ class JDService {
             filter = `${values.LDAP.OFFICE_CITY}=${searchValue}*`
         } else if (searchType == values.JD.HOME_CITY) {
             filter = `${values.LDAP.HOME_CITY}=${searchValue}*`
+        } else if (searchType == values.JD.CN) {
+            filter = `${values.LDAP.CN}=${searchValue}`
         } else {
             throw new Error(values.ERROR.INVALID_SEARCH_TYPE)
         }
@@ -96,8 +99,7 @@ class JDService {
 
         try {
             await ldapDataService.modify(dn, userData);
-            console.log(`Profile was updated for ${dn}`)
-            return { status: true, message: values.INFO.USER_DATA_UPDATED }
+            console.log(`Profile was updated for ${dn} on LDAP`)
         } catch (err) {
             if (!err.message) err.message = values.ERROR.PASSWORD_RESET_NOT_DONE
             console.log(`Profile data was not updated for ${dn}. Message: ${err.message}`)

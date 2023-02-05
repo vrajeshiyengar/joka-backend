@@ -3,6 +3,7 @@ const utils = require("../utils/utils");
 const connection = require("../services/mysql/mysql-connection");
 const dbHelper = require("../services/mysql/db-helper");
 const ldapService = require('../services/ldap/ldap-service');
+const values = require('../constants/values')
 
 const Router = express.Router();
 
@@ -46,6 +47,7 @@ Router.post("/login", (req, res) => {
               //   loginObj.cas_data = cas_data;
               // }
               if (result) {
+                res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
                 res.json(result);
               } else {
                 let loginObj = {
@@ -57,6 +59,7 @@ Router.post("/login", (req, res) => {
                   expiry: ts[1],
                 };
                 dbHelper.insertAccessToken(connection, loginObj, (result) => {
+                  res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
                   res.json(result);
                 });
               }
