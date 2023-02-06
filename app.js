@@ -15,7 +15,7 @@ app.use(
 );
 
 app.use("/api", ApiRoutes);
-app.use("/jd", JDApiRoutes)
+app.use("/api/jd", JDApiRoutes)
 
 app.listen(port, () =>
   console.log(
