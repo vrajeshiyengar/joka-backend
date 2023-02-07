@@ -19,6 +19,6 @@ app.use("/api/jd", JDApiRoutes);
 
 app.listen(port, () =>
   console.log(
-    `\n\n\n\n\n\nWelcome to JokaAuth!!\nDeveloped by ISG, IIM Calcutta\n\n\n\n\n\nJokaAuth listening on port ${port}!`
+    `\n\n\n\n\n\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\n\n\n\n\n\nJokaBackend listening on port ${port}!`
   )
 );
