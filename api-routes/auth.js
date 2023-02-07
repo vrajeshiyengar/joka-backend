@@ -86,13 +86,10 @@ Router.post("/verifyAccessToken", (req, res) => {
     // return;
     dbHelper.getByAccessToken(connection, req.body.access_token, (result) => {
       if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
-        res.json(result);
+        res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
+        res.status(200).send(values.INFO.VALID_TOKEN);
       } else {
-        res.json({
-          status: 401,
-          error: "Invalid access token",
-          message: "access_token invalid or expired",
-        });
+        res.status(401).send(values.ERROR.INVALID_TOKEN);
       }
     });
   }
