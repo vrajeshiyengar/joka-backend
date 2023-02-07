@@ -12,10 +12,9 @@ module.exports = {
                 dbHelper.getByAccessToken(connection, token, (result) => {
                     if (!result) return reject()
                     if (result.expiry && result.expiry <= utils.getTimeStamps()) {
+                        // Need to renew token in db here if expiry is soon
                         return reject()
                     }
-                    // Need to renew token in db here if expiry is soon
-                    
                     return resolve(result)
                 });
             } catch (err) {
