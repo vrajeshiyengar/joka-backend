@@ -6,7 +6,7 @@ module.exports = {
    ** which gets resolved or rejected based
    ** on the result from the API
    */
-  casLogin: (url, username, password) =>
+  /*casLogin: (url, username, password) =>
     new Promise((resolve, reject) => {
       request.post(
         {
@@ -19,7 +19,7 @@ module.exports = {
           resolve(body);
         }
       );
-    }),
+    }),*/
   generateToken: (length) => {
     var chars =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
