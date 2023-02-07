@@ -7,17 +7,15 @@ module.exports = {
     verifyJokaAuthToken: (token) => {
         return new Promise((resolve, reject) => {
             dbHelper.refreshAccessTokens(connection);
-            if (!(token && token.access_token && token.user_id)) return reject()
+            if (!token) return reject()
             try {
-                dbHelper.getByAccessToken(connection, token.access_token, (result) => {
+                dbHelper.getByAccessToken(connection, token, (result) => {
                     if (!result) return reject()
-                    if (result.expiry && result.expiry <= utils.getTimeStamps()) return reject()
-                    if (token.user_id !== result.user_id) return reject()
-
-                    if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
+                    if (result.expiry && result.expiry <= utils.getTimeStamps()) {
                         // Need to renew token in db here if expiry is soon
-                        return resolve(result)
+                        return reject()
                     }
+                    return resolve(result)
                 });
             } catch (err) {
                 return reject();

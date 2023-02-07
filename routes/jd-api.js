@@ -12,7 +12,7 @@ router.get("/users", async (req, res, next) => {
     let loggedInUserId = undefined;
 
     // Token Verification Block
-    const token = JSON.parse(req.headers[values.SECURITY.AUTH_TOKEN]);
+    const token = req.headers[values.SECURITY.AUTH_TOKEN];
     let new_token = ''
     try {
         new_token = await authUtils.verifyJokaAuthToken(token);
@@ -44,7 +44,7 @@ router.post("/updateUser", async (req, res) => {
     let loggedInUserId = undefined;
 
     // Token Verification Block
-    const token = JSON.parse(req.headers[values.SECURITY.AUTH_TOKEN]);
+    const token = req.headers[values.SECURITY.AUTH_TOKEN];
     let new_token = ''
     try {
         new_token = await authUtils.verifyJokaAuthToken(token);
