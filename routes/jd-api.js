@@ -6,7 +6,7 @@ const authUtils = require('../utils/auth-utils')
 const router = express.Router();
 
 
-router.get("/users", async (req, res, next) => {
+router.get("/users", async (req, res) => {
     console.log("/jd/users hit...");
 
     let loggedInUserId = undefined;
