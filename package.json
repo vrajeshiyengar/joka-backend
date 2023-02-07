@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nohup node app.js >> log.txt 2>> log.txt &",
+    "start": "nohup node app.js --watch >> log.txt 2>> log.txt &",
     "check": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
     "logs": "watch tail -n 50 log.txt",
     "stop": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}')",
