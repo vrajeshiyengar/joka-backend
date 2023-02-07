@@ -2,8 +2,6 @@ const express = require("express");
 const utils = require("../utils/utils");
 const connection = require("../services/mysql/mysql-connection");
 const dbHelper = require("../services/mysql/db-helper");
-const ldapService = require('../services/ldap/ldap-service');
-const values = require('../constants/values')
 
 const Router = express.Router();
 
@@ -23,43 +21,43 @@ Router.post("/login", (req, res) => {
       message: "Please provide a password",
     });
   } else {
-    ldapService
-      .authenticateUser(
+    utils
+      .casLogin(
+        "http://ec2-3-7-207-170.ap-south-1.compute.amazonaws.com:8000/cas/v1/users",
         req.body.username,
         req.body.password
       )
       .then((response) => {
-        if (!response.status) {
+        const cas_data = JSON.parse(response);
+        if (cas_data.authentication_exceptions) {
           res.json({
             status: 500,
             error: "Authentication Exceptions",
-            message: response.message,
+            message: cas_data.authentication_exceptions,
           });
-        } else {
+        } else if (cas_data.authentication) {
           const ts = utils.getTimeStamps(true);
           const at = utils.generateToken(100);
           dbHelper.getByUserId(
             connection,
-            response.attributes.user_id,
+            cas_data.authentication.principal.id,
             (result) => {
-              // let loginObj = {};
-              // if (req.body.cas == 1) {
-              //   loginObj.cas_data = cas_data;
-              // }
+              let loginObj = {};
+              if (req.body.cas == 1) {
+                loginObj.cas_data = cas_data;
+              }
               if (result) {
-                res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
-                res.json(result);
+                loginObj = { ...loginObj, ...result };
+                res.json(loginObj);
               } else {
-                let loginObj = {
+                loginObj = {
                   access_token: at,
-                  user_id: response.attributes.user_id,
-                  email: response.attributes.email,
-                  fullname: response.attributes.fullname,
+                  user_id: cas_data.authentication.principal.id,
+                  email: cas_data.authentication.principal.attributes.mail[0],
                   created: ts[0],
                   expiry: ts[1],
                 };
                 dbHelper.insertAccessToken(connection, loginObj, (result) => {
-                  res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
                   res.json(result);
                 });
               }
