@@ -8,7 +8,7 @@ const values = require('../constants/values')
 const Router = express.Router();
 
 Router.post("/login", (req, res) => {
-  console.log("/api/login hit...", req.body);
+  console.log("/api/login hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.username) {
     res.status(500).json({
@@ -75,7 +75,7 @@ Router.post("/login", (req, res) => {
 });
 
 Router.post("/verifyAccessToken", (req, res) => {
-  console.log("/api/verifyAccessToken hit...", req.body);
+  console.log("/api/verifyAccessToken hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.access_token) {
     res.status(500).json({
@@ -99,6 +99,20 @@ Router.post("/verifyAccessToken", (req, res) => {
         });
       }
     });
+  }
+});
+
+// Deletes token from DB. Returns ok even if token is not preesnt id db
+Router.post("/logout", async (req, res) => {
+  console.log("/api/logout hit...");
+
+  const token = req.headers[values.SECURITY.AUTH_TOKEN];
+  try {
+    await dbHelper.deleteAccessToken(connection, token);
+    res.status(200).send(values.INFO.LOGGED_OUT_SUCCESS)
+  } catch (err) {
+    console.log(err.message)
+    res.status(401).send(values.ERROR.INVALID_TOKEN)
   }
 });
 

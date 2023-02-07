@@ -15,7 +15,8 @@ module.exports = {
     INFO: {
         PASSWORD_RESET_DONE: "Your Password has been updated",
         USER_ID_EXISTS: "User ID exists",
-        USER_DATA_UPDATED: "User data has been updated"
+        USER_DATA_UPDATED: "User data has been updated",
+        LOGGED_OUT_SUCCESS: "User has been logged out"
     },
     LDAP: {
         SN: "sn",
