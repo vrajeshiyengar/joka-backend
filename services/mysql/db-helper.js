@@ -49,4 +49,14 @@ module.exports = {
       callback(dataObj);
     });
   },
+  deleteAccessToken: (connection, access_token) => {
+    return new Promise((resolve, reject) => {
+      var sql = `DELETE FROM AccessToken WHERE access_token = '${access_token}'`;
+      connection.query(sql, function (err, result) {
+        if (err) 
+          return reject(err);
+        return resolve();
+      });
+    });
+  }
 };

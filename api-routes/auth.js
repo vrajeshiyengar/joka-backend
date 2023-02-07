@@ -8,17 +8,17 @@ const values = require('../constants/values')
 const Router = express.Router();
 
 Router.post("/login", (req, res) => {
-  console.log("/api/login hit...", req.body);
+  console.log("/api/login hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.username) {
-    res.status(500).json({
-      status: 500,
+    res.status(400).json({
+      status: 400,
       error: "No username provided",
       message: "Please provide a username",
     });
   } else if (!req.body.password) {
-    res.status(500).json({
-      status: 500,
+    res.status(400).json({
+      status: 400,
       error: "No password provided",
       message: "Please provide a password",
     });
@@ -30,9 +30,9 @@ Router.post("/login", (req, res) => {
       )
       .then((response) => {
         if (!response.status) {
-          res.json({
-            status: 500,
-            error: "Authentication Exceptions",
+          res.status(401).json({
+            status: 401,
+            error: values.ERROR.INVALID_CREDENTIALS,
             message: response.message,
           });
         } else {
@@ -42,13 +42,9 @@ Router.post("/login", (req, res) => {
             connection,
             response.attributes.user_id,
             (result) => {
-              // let loginObj = {};
-              // if (req.body.cas == 1) {
-              //   loginObj.cas_data = cas_data;
-              // }
               if (result) {
                 res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
-                res.json(result);
+                res.status(200).send(values.INFO.EXISTING_LOG_IN);
               } else {
                 let loginObj = {
                   access_token: at,
@@ -60,7 +56,7 @@ Router.post("/login", (req, res) => {
                 };
                 dbHelper.insertAccessToken(connection, loginObj, (result) => {
                   res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
-                  res.json(result);
+                  res.status(200).send(values.INFO.LOG_IN_SUCCESS);
                 });
               }
             }
@@ -69,13 +65,13 @@ Router.post("/login", (req, res) => {
       })
       .catch((error) => {
         console.log("error", error);
-        res.send(error);
+        res.status(500).send(error);
       });
   }
 });
 
 Router.post("/verifyAccessToken", (req, res) => {
-  console.log("/api/verifyAccessToken hit...", req.body);
+  console.log("/api/verifyAccessToken hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.access_token) {
     res.status(500).json({
@@ -90,15 +86,26 @@ Router.post("/verifyAccessToken", (req, res) => {
     // return;
     dbHelper.getByAccessToken(connection, req.body.access_token, (result) => {
       if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
-        res.json(result);
+        res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
+        res.status(200).send(values.INFO.VALID_TOKEN);
       } else {
-        res.json({
-          status: 401,
-          error: "Invalid access token",
-          message: "access_token invalid or expired",
-        });
+        res.status(401).send(values.ERROR.INVALID_TOKEN);
       }
     });
+  }
+});
+
+// Deletes token from DB. Returns ok even if token is not preesnt id db
+Router.post("/logout", async (req, res) => {
+  console.log("/api/logout hit...");
+
+  const token = req.headers[values.SECURITY.AUTH_TOKEN];
+  try {
+    await dbHelper.deleteAccessToken(connection, token);
+    res.status(200).send(values.INFO.LOGGED_OUT_SUCCESS)
+  } catch (err) {
+    console.log(err.message)
+    res.status(401).send(values.ERROR.INVALID_TOKEN)
   }
 });
 
