@@ -11,14 +11,14 @@ Router.post("/login", (req, res) => {
   console.log("/api/login hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.username) {
-    res.status(500).json({
-      status: 500,
+    res.status(400).json({
+      status: 400,
       error: "No username provided",
       message: "Please provide a username",
     });
   } else if (!req.body.password) {
-    res.status(500).json({
-      status: 500,
+    res.status(400).json({
+      status: 400,
       error: "No password provided",
       message: "Please provide a password",
     });
@@ -30,9 +30,9 @@ Router.post("/login", (req, res) => {
       )
       .then((response) => {
         if (!response.status) {
-          res.json({
-            status: 500,
-            error: "Authentication Exceptions",
+          res.status(401).json({
+            status: 401,
+            error: values.ERROR.INVALID_CREDENTIALS,
             message: response.message,
           });
         } else {
@@ -42,13 +42,9 @@ Router.post("/login", (req, res) => {
             connection,
             response.attributes.user_id,
             (result) => {
-              // let loginObj = {};
-              // if (req.body.cas == 1) {
-              //   loginObj.cas_data = cas_data;
-              // }
               if (result) {
                 res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
-                res.json(result);
+                res.status(200).send(values.INFO.EXISTING_LOG_IN);
               } else {
                 let loginObj = {
                   access_token: at,
@@ -60,7 +56,7 @@ Router.post("/login", (req, res) => {
                 };
                 dbHelper.insertAccessToken(connection, loginObj, (result) => {
                   res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
-                  res.json(result);
+                  res.status(200).send(values.INFO.LOG_IN_SUCCESS);
                 });
               }
             }
@@ -69,7 +65,7 @@ Router.post("/login", (req, res) => {
       })
       .catch((error) => {
         console.log("error", error);
-        res.send(error);
+        res.status(500).send(error);
       });
   }
 });
