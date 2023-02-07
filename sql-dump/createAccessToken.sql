@@ -1,4 +1,4 @@
-CREATE TABLE `JokaAuth`.`AccessToken` (
+CREATE TABLE `JokaBackend`.`AccessToken` (
   `access_token` VARCHAR(100) NOT NULL,
   `user_id` VARCHAR(100) NOT NULL,
   `email` VARCHAR(100) NULL,
