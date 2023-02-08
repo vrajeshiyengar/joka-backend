@@ -1,0 +1,1 @@
+CREATE TABLE `JokaBackend`.`ResetPasswordToken` (`reset_password_token` VARCHAR(100) NOT NULL,`user_id` VARCHAR(100) NOT NULL,`created` VARCHAR(25) NOT NULL,`expiry` VARCHAR(25) NOT NULL,PRIMARY KEY (`reset_password_token`),UNIQUE INDEX `reset_password_token_UNIQUE` (`reset_password_token` ASC) VISIBLE);
