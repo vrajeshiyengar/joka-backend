@@ -1228,3 +1228,78 @@ INSERT INTO JokaUtilsMess (id, menu, reviews) VALUES ('7_NH_breakfast', '["Dosa"
 INSERT INTO JokaUtilsMess (id, menu, reviews) VALUES ('7_NH_lunch', '["Chicken Biryani","Veg Biryani","Paneer Makhani","Salan","Aloo Matar","Chana Dal","Ice-Cream","Boondi Raita","Roti","Salad"]', '[]');
 INSERT INTO JokaUtilsMess (id, menu, reviews) VALUES ('7_NH_snacks', '["Papdi Chaat","Tea","Coffee,Nimbu Pani","Rasna"]', '[]');
 INSERT INTO JokaUtilsMess (id, menu, reviews) VALUES ('7_NH_dinner', '["Egg Tadka","Paneer Tadka","Pindi Chana Masala","Chilli Potato","Rumali Roti","Roti","Veg Fried Rice","Rice","Salad"]', '[]');
+
+CREATE TABLE JokaUtilsTimetableConfig (
+  id VARCHAR(50) NOT NULL,
+  json_value JSON,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE);
+
+INSERT INTO JokaUtilsTimetableConfig (id, json_value) VALUES ('term_start','["2022-12-12T00:00:00"]');
+INSERT INTO JokaUtilsTimetableConfig (id, json_value) VALUES ('slots','{
+    "0": {
+      "d": "",
+      "t": ""
+    },
+    "1": {
+      "d": "Monday",
+      "t": "8:30am-10:00am"
+    },
+    "2": {
+      "d": "Tuesday",
+      "t": "10:15am-11:45am"
+    },
+    "3": {
+      "d": "Wednesday",
+      "t": "12:00pm-1:30pm"
+    },
+    "4": {
+      "d": "Thursday",
+      "t": "2:30pm-4:00pm"
+    },
+    "5": {
+      "d": "Friday",
+      "t": "4:15pm-5:45pm"
+    },
+    "6": {
+      "d": "Saturday",
+      "t": "6:00pm-7:30pm"
+    },
+    "7": {
+      "d": "Sunday"
+    }
+  }');
+INSERT INTO JokaUtilsTimetableConfig (id, json_value) VALUES ('week_map','{
+    "58": {
+      "0": "Term VI - Pre Midterm W1",
+      "1": "Term VI - Pre Midterm W2",
+      "2": "Term VI - Pre Midterm W3",
+      "3": "Term VI - Pre Midterm W4",
+      "4": "Term VI - Pre Midterm W5",
+      "5": "Term VI - Midterm week W6",
+      "6": "Term VI - Post Midterm W7",
+      "7": "Term VI - Post Midterm W8",
+      "8": "Term VI - Post Midterm W9",
+      "9": "Term VI - Post Midterm W10",
+      "10": "Term VI - Final Placement Week",
+      "11": "Term VI - Endterms",
+      "12": "Enjoy!",
+      "13": "Enjoy!"
+    },
+    "59": {
+      "0": "Term II - Endterms",
+      "1": "Term Break",
+      "2": "Term III - Pre Midterm W1",
+      "3": "Term III - Pre Midterm W2",
+      "4": "Term III - Pre Midterm W3",
+      "5": "Term III - Pre Midterm W4",
+      "6": "Term III - Pre Midterm W5",
+      "7": "Term III - Post Midterm W6",
+      "8": "Term III - Post Midterm W7",
+      "9": "Term III - Post Midterm W8",
+      "10": "Term III - Final Placement Week",
+      "11": "Term III - Post Midterm W9",
+      "12": "Term III - Post Midterm W10",
+      "13": "Term III - Endterms"
+    }
+  }');
