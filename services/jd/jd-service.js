@@ -31,6 +31,8 @@ class JDService {
         // admin edit access to all profiles can be implemented here. Need to remove loggedin user id mismatch check
         if (loggedInUserId && loggedInUserId == new_user['cn']) new_user[values.JD.EDIT_PROFILE_ACCESS] = true
 
+        delete new_user[values.LDAP.DN];
+
         return new_user;
     }
 
