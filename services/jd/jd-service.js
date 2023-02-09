@@ -79,9 +79,6 @@ class JDService {
 
         if (!(userData[values.JD.EDIT_PROFILE_ACCESS])) throw new Error(values.ERROR.EDIT_PROFILE_ACCESS_MISSING);
 
-        if (!userData["dn"]) throw new Error(values.ERROR.USER_DN_MISSING);
-        const dn = userData["dn"];
-
         //deleting uneditable fields
         const nonEditableFields = ["dn", "cn", "mail", "displayName", "description",
             "departmentNumber", "batch", "joiningyear", "passingoutyear", "regno", "UI_GROUP", "EDIT_PROFILE_ACCESS"];
@@ -98,6 +95,11 @@ class JDService {
         }
 
         try {
+
+            let filter = `(cn=${loggedInUserId})`;
+            const searchResult = await ldapDataService.search(filter, [values.LDAP.DN]);
+            const dn = searchResult[0].dn;
+
             await ldapDataService.modify(dn, userData);
             console.log(`Profile was updated for ${dn} on LDAP`)
         } catch (err) {
