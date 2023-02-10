@@ -4,6 +4,7 @@ const authUtils = require("../utils/auth-utils");
 const connection = require("../services/mysql/mysql-connection");
 const dbHelper = require("../services/mysql/db-helper");
 const ldapService = require('../services/ldap/ldap-service');
+const emailService = require('../services/notification/email-service')
 const values = require('../constants/values')
 
 const Router = express.Router();
@@ -116,11 +117,12 @@ Router.get("/resetPasswordToken", async (req, res) => {
   const user_id = req.query[values.SECURITY.USER_ID];
   try {
     const user_data = await ldapService.getUserDataForPasswordReset(user_id);
-    const token = await authUtils.createPasswordResetToken(user_data[values.LDAP.DN]);
+    const reset_password_token = await authUtils.createPasswordResetToken(user_data[values.LDAP.DN]);
     const user_email = user_data[values.LDAP.EMAIL];
-    console.log("Sending password reset mail to:", user_email);
-    // Send email here***************************************************
-    res.status(200).send(token);
+    
+    await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
+    
+    res.status(200).send();
   } catch (err) {
     if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
     res.status(500).send(err.message);
