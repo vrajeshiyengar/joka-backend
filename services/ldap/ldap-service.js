@@ -29,14 +29,14 @@ class LdapService {
         return { status: result, attributes: attributes }
     }
 
-    async searchUserForPasswordReset(username) {
-        const filter = `cn=${username}`;
-        const users = await ldapDataService.search(filter, [values.LDAP.DN]);
+    async getUserDataForPasswordReset(user_id) {
+        const filter = `cn=${user_id}`;
+        const users = await ldapDataService.search(filter, [values.LDAP.DN, values.LDAP.EMAIL]);
 
-        if (users.length === 0) return { status: false, message: values.ERROR.INVALID_USER_ID }
-        if (users.length > 1) return { status: false, message: values.ERROR.USER_ID_NOT_UNIQUE } // Should never happen
+        if (users.length === 0) throw new Error(values.ERROR.INVALID_USER_ID);
+        if (users.length > 1) throw new Error(values.ERROR.USER_ID_NOT_UNIQUE);
 
-        return { status: true, message: values.INFO.USER_ID_EXISTS, dn: users[0].dn }
+        return users[0]
     }
 
     async updateUserPassword(username, password, dn = undefined) {
@@ -48,20 +48,11 @@ class LdapService {
 
             dn = users[0].dn;
         }
-
         const hashedPassword = ldapUtils.generateHashedPassword(password);
-
-        try {
-            let modifications = {};
-            modifications[values.LDAP.PASSWORD] = hashedPassword;
-            await ldapDataService.modify(dn, modifications);
-            console.log(`Password was updated for ${username}`)
-            return { status: true, message: values.INFO.PASSWORD_RESET_DONE }
-        } catch (err) {
-            if (!err.message) err.message = values.ERROR.PASSWORD_RESET_NOT_DONE
-            console.log(`Password was not updated for ${username}. Message: ${err.message}`)
-            return { status: false, message: err.message }
-        }
+        let modifications = {};
+        modifications[values.LDAP.PASSWORD] = hashedPassword;
+        await ldapDataService.modify(dn, modifications);
+        console.log(`Password was updated for ${dn}`)
     }
 }
 

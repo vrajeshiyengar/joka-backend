@@ -31,12 +31,12 @@ module.exports = {
   },
   getTimeStamps(
     returnExpiry = false,
+    // expiryMilliseconds = 1000 * 20, // 20 seconds
+    expiryMilliseconds = 1000 * 60 * 5, // 5 minutes
+    // expiryMilliseconds = 1000 * 60 * 60, // 1 hour
+    // expiryMilliseconds = 1000 * 60 * 60 * 24, // 1 day
+    // expiryMilliseconds = 1000 * 60 * 60 * 24 * 3, // 3 days
     date = new Date(),
-    // expiryMilliseconds = 1000 * 20 // 20 seconds
-    expiryMilliseconds = 1000 * 60 * 5 // 5 minutes
-    // expiryMilliseconds = 1000 * 60 * 60 // 1 hour
-    // expiryMilliseconds = 1000 * 60 * 60 * 24 // 1 day
-    // expiryMilliseconds = 1000 * 60 * 60 * 24 * 3 // 3 days
   ) {
     const pad = function (num) {
       return (num < 10 ? "0" : "") + num;

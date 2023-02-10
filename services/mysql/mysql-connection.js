@@ -21,9 +21,9 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (!err) {
-    console.log("JokaAuth DB connection established");
+    console.log("JokaBackend DB connection established");
   } else {
-    console.log("JokaAuth DB connection failed!");
+    console.log("JokaBackend DB connection failed!");
     console.log("\tError code: ", err.code);
     console.log("\tError message: ", err.sqlMessage);
     console.log("\tFatal: ", err.fatal);

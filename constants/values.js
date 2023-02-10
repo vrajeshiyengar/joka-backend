@@ -10,7 +10,8 @@ module.exports = {
         EDIT_PROFILE_ACCESS_MISSING: "Editing this profile is not allowed",
         USER_ID_MISMATCH: "Logged-in user is different",
         INVALID_TOKEN: "Token Validation Failed",
-        PROFILE_NOT_UPDATED: "Profile was not updated"
+        PROFILE_NOT_UPDATED: "Profile was not updated",
+        INVALID_PASSWORD: "You have provided an invalid password"
     },
     INFO: {
         PASSWORD_RESET_DONE: "Your Password has been updated",
@@ -66,5 +67,8 @@ module.exports = {
     },
     SECURITY: {
         AUTH_TOKEN: "joka_auth_token", //header keys need to be in lower case
+        USER_ID: "user_id",
+        RESET_PASSWORD_TOKEN: "reset_password_token",
+        PASSWORD: "password"
     }
 };
