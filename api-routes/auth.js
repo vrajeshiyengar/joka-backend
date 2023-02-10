@@ -2,8 +2,8 @@ const express = require("express");
 const utils = require("../utils/utils");
 const connection = require("../services/mysql/mysql-connection");
 const dbHelper = require("../services/mysql/db-helper");
-const ldapService = require('../services/ldap/ldap-service');
-const values = require('../constants/values')
+const ldapService = require("../services/ldap/ldap-service");
+const values = require("../constants/values");
 
 const Router = express.Router();
 
@@ -24,10 +24,7 @@ Router.post("/login", (req, res) => {
     });
   } else {
     ldapService
-      .authenticateUser(
-        req.body.username,
-        req.body.password
-      )
+      .authenticateUser(req.body.username, req.body.password)
       .then((response) => {
         if (!response.status) {
           res.status(401).json({
@@ -43,7 +40,10 @@ Router.post("/login", (req, res) => {
             response.attributes.user_id,
             (result) => {
               if (result) {
-                res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
+                res.setHeader(
+                  values.SECURITY.AUTH_TOKEN,
+                  JSON.stringify(result)
+                );
                 res.status(200).send(values.INFO.EXISTING_LOG_IN);
               } else {
                 let loginObj = {
@@ -55,7 +55,10 @@ Router.post("/login", (req, res) => {
                   expiry: ts[1],
                 };
                 dbHelper.insertAccessToken(connection, loginObj, (result) => {
-                  res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
+                  res.setHeader(
+                    values.SECURITY.AUTH_TOKEN,
+                    JSON.stringify(result)
+                  );
                   res.status(200).send(values.INFO.LOG_IN_SUCCESS);
                 });
               }
@@ -86,7 +89,7 @@ Router.post("/verifyAccessToken", (req, res) => {
     // return;
     dbHelper.getByAccessToken(connection, req.body.access_token, (result) => {
       if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
-        res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result))
+        res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result));
         res.status(200).send(values.INFO.VALID_TOKEN);
       } else {
         res.status(401).send(values.ERROR.INVALID_TOKEN);
@@ -102,10 +105,10 @@ Router.post("/logout", async (req, res) => {
   const token = req.headers[values.SECURITY.AUTH_TOKEN];
   try {
     await dbHelper.deleteAccessToken(connection, token);
-    res.status(200).send(values.INFO.LOGGED_OUT_SUCCESS)
+    res.status(200).send(values.INFO.LOGGED_OUT_SUCCESS);
   } catch (err) {
-    console.log(err.message)
-    res.status(401).send(values.ERROR.INVALID_TOKEN)
+    console.log(err.message);
+    res.status(401).send(values.ERROR.INVALID_TOKEN);
   }
 });
 
