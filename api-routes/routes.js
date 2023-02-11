@@ -1,14 +1,6 @@
 const express = require("express");
-const values = require("../constants/values");
-const jdService = require('../services/jd/jd-service');
-const authUtils = require('../utils/auth-utils')
-
-const AuthApiRoutes = require("./auth");
-const JDApiRoutes = require("./jd");
-
-const router = express.Router();
-
-router.use("/auth", AuthApiRoutes);
-router.use("/jd", JDApiRoutes);
-
-module.exports = router;
+const Router = express.Router();
+["auth", "jd", "tt"].forEach((x) => {
+  Router.use(`/${x}`, require(`./${x}`));
+});
+module.exports = Router;

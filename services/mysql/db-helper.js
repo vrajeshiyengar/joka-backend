@@ -1,6 +1,5 @@
 const values = require("../../constants/values");
 const utils = require("../../utils/utils");
-const connection = require("./mysql-connection");
 
 module.exports = {
   refreshAccessTokens: (connection) => {
@@ -46,7 +45,7 @@ module.exports = {
   },
   //add full name here
   insertAccessToken: (connection, dataObj, callback) => {
-    var sql = `INSERT INTO AccessToken (access_token, user_id, email, created, expiry) VALUES ("${dataObj.access_token}", "${dataObj.user_id}", "${dataObj.email}", "${dataObj.created}", "${dataObj.expiry}")`;
+    var sql = `INSERT INTO AccessToken (access_token, user_id, email, fullname, created, expiry) VALUES ("${dataObj.access_token}", "${dataObj.user_id}", "${dataObj.email}", "${dataObj.fullname}", "${dataObj.created}", "${dataObj.expiry}")`;
     connection.query(sql, function (err, result) {
       if (err) throw err;
       callback(dataObj);
@@ -56,8 +55,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       var sql = `DELETE FROM AccessToken WHERE access_token = '${access_token}'`;
       connection.query(sql, function (err, result) {
-        if (err)
-          return reject(err);
+        if (err) return reject(err);
         return resolve();
       });
     });

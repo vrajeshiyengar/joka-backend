@@ -1,10 +1,10 @@
 {
-  "name": "joka-auth-node",
+  "name": "joka-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nohup node app.js > log.txt 2> log.txt &",
+    "start": "nohup node app.js --watch >> log.txt 2>> log.txt &",
     "check": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
     "logs": "watch tail -n 50 log.txt",
     "stop": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}')",
@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vrajeshiyengar/joka-auth-node.git"
+    "url": "git+https://github.com/vrajeshiyengar/joka-backend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vrajeshiyengar/joka-auth-node/issues"
+    "url": "https://github.com/vrajeshiyengar/joka-backend/issues"
   },
-  "homepage": "https://github.com/vrajeshiyengar/joka-auth-node#readme",
+  "homepage": "https://github.com/vrajeshiyengar/joka-backend#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
     "dotenv": "^16.0.3",
