@@ -86,4 +86,7 @@ module.exports = {
           pad(date.getSeconds()) +
           "Z";
   },
+  isDevMode: () => {
+    return (process.env.DEV_MODE == 1);
+  }
 };

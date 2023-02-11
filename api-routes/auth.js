@@ -125,7 +125,7 @@ Router.get("/resetPasswordToken", async (req, res) => {
     
     await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
     
-    res.status(200).send();
+    res.status(200).send(utils.isDevMode() ? reset_password_token : '');
   } catch (err) {
     if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
     res.status(500).send(err.message);
