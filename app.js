@@ -21,6 +21,6 @@ app.use("/api", routes);
 
 app.listen(port, () =>
   console.log(
-    `\n\n\n\n\n\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\n\n\n\n\n\nJokaBackend listening on port ${port}!`
+    `\n\n\n\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\n\n\n\nJokaBackend listening on port ${port}!\n\nProduction Mode: ${!utils.isDevMode()}`
   )
 );
