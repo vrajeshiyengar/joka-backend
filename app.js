@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const routes = require("./api-routes/routes");
 const app = express();
 const port = process.env.PORT || 3000;
+const cors = require("cors")
+const utils = require("./utils/utils")
 
 app.use(bodyParser.json());
 app.use(
@@ -13,10 +15,12 @@ app.use(
   })
 );
 
+if (utils.isDevMode()) app.use(cors())
+
 app.use("/api", routes);
 
 app.listen(port, () =>
   console.log(
-    `\n\n\n\n\n\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\n\n\n\n\n\nJokaBackend listening on port ${port}!`
+    `\n\n\n\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\n\n\n\nJokaBackend listening on port ${port}!\n\nProduction Mode: ${!utils.isDevMode()}`
   )
 );

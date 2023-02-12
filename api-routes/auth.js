@@ -125,67 +125,7 @@ Router.get("/resetPasswordToken", async (req, res) => {
     
     await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
     
-    res.status(200).send(utils.isDevMode() ? reset_password_token : '');
-  } catch (err) {
-    if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
-    res.status(500).send(err.message);
-  }
-});
-
-Router.get("/verifyResetToken", async (req, res) => {
-  console.log("/api/auth/verifyResetToken hit...", req.query);
-
-  const reset_password_token = req.query[values.SECURITY.RESET_PASSWORD_TOKEN];
-  if (!reset_password_token) return res.status(400).send(values.ERROR.INVALID_TOKEN);
-
-  try {
-    const dn = await authUtils.verifyResetPasswordToken(reset_password_token);
-    let cn = dn.split(",")[0].split("=")[1]
-    res.status(200).send(cn);
-  } catch (err) {
-    if (err.message == values.ERROR.INVALID_TOKEN) return res.status(401).send(err.message);
-    res.status(500).send(err.message);
-  }
-});
-
-Router.post("/resetPassword", async (req, res) => {
-  console.log("/api/auth/verifyResetToken hit...", req.body);
-  const data = req.body;
-  const reset_password_token = data[values.SECURITY.RESET_PASSWORD_TOKEN];
-  const password = data[values.SECURITY.PASSWORD];
-
-  if (!reset_password_token) return res.status(400).send(values.ERROR.INVALID_TOKEN);
-  if (!password) return res.status(400).send(values.ERROR.INVALID_PASSWORD);
-
-  let dn = '';
-  try {
-    dn = await authUtils.verifyResetPasswordToken(reset_password_token);
-  } catch (err) {
-    if (err.message == values.ERROR.INVALID_TOKEN) return res.status(401).send(err.message);
-    return res.status(500).send(err.message);
-  }
-
-  try {
-    await ldapService.updateUserPassword(undefined, password, dn);
-    await authUtils.removeResetPasswordToken(reset_password_token);
-    res.status(200).send(values.INFO.PASSWORD_RESET_DONE);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
-
-Router.get("/resetPasswordToken", async (req, res) => {
-  console.log("/api/auth/resetPasswordToken hit...", req.query);
-
-  const user_id = req.query[values.SECURITY.USER_ID];
-  try {
-    const user_data = await ldapService.getUserDataForPasswordReset(user_id);
-    const reset_password_token = await authUtils.createPasswordResetToken(user_data[values.LDAP.DN]);
-    const user_email = user_data[values.LDAP.EMAIL];
-    
-    await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
-    
-    res.status(200).send();
+    res.status(200).send(utils.isDevMode() ? reset_password_token : user_email);
   } catch (err) {
     if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
     res.status(500).send(err.message);

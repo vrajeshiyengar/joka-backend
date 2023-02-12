@@ -87,6 +87,6 @@ module.exports = {
           "Z";
   },
   isDevMode: () => {
-    return (process.env.DEV_MODE == 1);
+    return (process.env.NODE_ENV !== "production");
   }
 };
