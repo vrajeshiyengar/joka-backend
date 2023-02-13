@@ -11,11 +11,39 @@ module.exports = {
             try {
                 dbHelper.getByAccessToken(connection, token, (result) => {
                     if (!result) return reject()
+
                     if (result.expiry && result.expiry <= utils.getTimeStamps()) {
-                        // Need to renew token in db here if expiry is soon
-                        return reject()
+                        return reject();
                     }
-                    return resolve(result)
+                    const expiryTimeObj = new Date(result.expiry);
+                    const currentTimeObj = new Date(utils.getTimeStamps());
+                    const ttl_in_seconds = (expiryTimeObj.getTime() - currentTimeObj.getTime()) / 1000;
+
+                    // Creating new token if old one is close to expiry
+                    const renewal_threshold_in_seconds = 10;
+                    // const renewal_threshold_in_seconds = 60;
+                    if (ttl_in_seconds <= renewal_threshold_in_seconds) {
+                        const ts = utils.getTimeStamps(true);
+                        const at = utils.generateToken(100);
+                        let dataObj = {
+                            access_token: at,
+                            user_id: result.user_id,
+                            email: result.email,
+                            fullname: result.fullname,
+                            created: ts[0],
+                            expiry: ts[1]
+                        };
+                        dbHelper.insertAccessToken(connection, dataObj, async (res) => {
+                            try {
+                                await dbHelper.deleteAccessToken(connection, result.access_token);
+                            } catch (err) {
+                                console.error(err);
+                            }
+                            return resolve(res);
+                        });
+                    } else {
+                        return resolve(result)
+                    }
                 });
             } catch (err) {
                 return reject();
