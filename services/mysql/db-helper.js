@@ -13,7 +13,7 @@ module.exports = {
             const deleteSql = `DELETE FROM AccessToken WHERE access_token = '${x.access_token}'`;
             connection.query(deleteSql, function (err, result) {
               if (err) throw err;
-              console.log("Deleted entry: ", result);
+              if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken`)
             });
           }
         });
