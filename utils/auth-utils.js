@@ -20,10 +20,11 @@ module.exports = {
                     const ttl_in_seconds = (expiryTimeObj.getTime() - currentTimeObj.getTime()) / 1000;
 
                     // Creating new token if old one is close to expiry
-                    const renewal_threshold_in_seconds = 10;
-                    // const renewal_threshold_in_seconds = 60;
+                    const renewal_threshold_in_seconds = process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS ?
+                        parseInt(process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS) : 60;
+
                     if (ttl_in_seconds <= renewal_threshold_in_seconds) {
-                        const ts = utils.getTimeStamps(true);
+                        const ts = utils.getTimeStamps(true, 1000 * 60 * parseInt(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
                         const at = utils.generateToken(100);
                         let dataObj = {
                             access_token: at,

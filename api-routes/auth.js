@@ -35,7 +35,7 @@ Router.post("/login", (req, res) => {
             message: response.message,
           });
         } else {
-          const ts = utils.getTimeStamps(true);
+          const ts = utils.getTimeStamps(true, 1000 * 60 * parseInt(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
           const at = utils.generateToken(100);
           dbHelper.getAccessTokenByUserId(
             connection,
