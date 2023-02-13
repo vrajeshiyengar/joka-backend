@@ -11,7 +11,9 @@ module.exports = {
         USER_ID_MISMATCH: "Logged-in user is different",
         INVALID_TOKEN: "Token Validation Failed",
         PROFILE_NOT_UPDATED: "Profile was not updated",
-        INVALID_PASSWORD: "You have provided an invalid password"
+        INVALID_PASSWORD: "You have provided an invalid password",
+        TOKEN_MISSING: "Token Missing",
+        SERVER_ERROR_FOR_TOKEN: "Server error while validating token"
     },
     INFO: {
         PASSWORD_RESET_DONE: "Your Password has been updated",

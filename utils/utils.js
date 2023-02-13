@@ -88,5 +88,23 @@ module.exports = {
   },
   isDevMode: () => {
     return (process.env.NODE_ENV !== "production");
+  },
+  getFormattedDateString: (date) => {
+    const pad = function (num) {
+      return (num < 10 ? "0" : "") + num;
+    };
+
+    return date.getFullYear() +
+      "-" +
+      pad(date.getMonth() + 1) +
+      "-" +
+      pad(date.getDate()) +
+      "T" +
+      pad(date.getHours()) +
+      ":" +
+      pad(date.getMinutes()) +
+      ":" +
+      pad(date.getSeconds()) +
+      "Z";
   }
 };
