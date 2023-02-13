@@ -35,7 +35,7 @@ Router.post("/login", (req, res) => {
             message: response.message,
           });
         } else {
-          const ts = utils.getTimeStamps(true, 1000 * 60 * parseInt(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
+          const ts = utils.getTimeStamps(true, 1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
           const at = utils.generateToken(100);
           dbHelper.getAccessTokenByUserId(
             connection,
@@ -75,7 +75,7 @@ Router.post("/login", (req, res) => {
   }
 });
 
-Router.post("/verifyAccessToken", (req, res) => {
+Router.post("/verifyAccessToken", async (req, res) => {
   console.log("/api/verifyAccessToken hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.access_token) {
@@ -85,18 +85,19 @@ Router.post("/verifyAccessToken", (req, res) => {
       message: "Please provide an access_token",
     });
   } else {
-    // dbHelper.getAllAccessTokens(connection, (results) => {
-    //   res.json(results);
-    // });
-    // return;
-    dbHelper.getByAccessToken(connection, req.body.access_token, (result) => {
+    try {
+      const result = await authUtils.verifyJokaAuthToken(req.body.access_token);
+      
       if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
         res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result));
         res.status(200).send(values.INFO.VALID_TOKEN);
       } else {
         res.status(401).send(values.ERROR.INVALID_TOKEN);
       }
-    });
+    } catch (err) {
+      res.status(500).send(values.ERROR.INVALID_TOKEN);
+    }
+
   }
 });
 
@@ -122,9 +123,9 @@ Router.get("/resetPasswordToken", async (req, res) => {
     const user_data = await ldapService.getUserDataForPasswordReset(user_id);
     const reset_password_token = await authUtils.createPasswordResetToken(user_data[values.LDAP.DN]);
     const user_email = user_data[values.LDAP.EMAIL];
-    
+
     await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
-    
+
     res.status(200).send(utils.isDevMode() ? reset_password_token : user_email);
   } catch (err) {
     if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
