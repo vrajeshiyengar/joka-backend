@@ -24,3 +24,13 @@ app.listen(port, () =>
     `\n\n\n\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\n\n\n\nJokaBackend listening on port ${port}!\n\nProduction Mode: ${!utils.isDevMode()}`
   )
 );
+
+app.use((err, req, res, next) => {
+  if (err) {
+    console.error('****Server Error****\n\n', err.stack);
+    if (!utils.isDevMode()) {
+      return res.status(500).send('Server Error');
+    }
+    return res.status(500).json({ error: 'Server Error', error_stack: err.stack });
+  }
+});
