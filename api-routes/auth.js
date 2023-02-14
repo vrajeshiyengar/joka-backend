@@ -10,7 +10,6 @@ const values = require('../constants/values')
 const Router = express.Router();
 
 Router.post("/login", (req, res) => {
-  console.log("/api/login hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.username) {
     res.status(400).json({
@@ -35,7 +34,7 @@ Router.post("/login", (req, res) => {
             message: response.message,
           });
         } else {
-          const ts = utils.getTimeStamps(true);
+          const ts = utils.getTimeStamps(true, 1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
           const at = utils.generateToken(100);
           dbHelper.getAccessTokenByUserId(
             connection,
@@ -69,14 +68,13 @@ Router.post("/login", (req, res) => {
         }
       })
       .catch((error) => {
-        console.log("error", error);
+        console.error(error);
         res.status(500).send(error);
       });
   }
 });
 
-Router.post("/verifyAccessToken", (req, res) => {
-  console.log("/api/verifyAccessToken hit...");
+Router.post("/verifyAccessToken", async (req, res) => {
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.access_token) {
     res.status(500).json({
@@ -85,46 +83,45 @@ Router.post("/verifyAccessToken", (req, res) => {
       message: "Please provide an access_token",
     });
   } else {
-    // dbHelper.getAllAccessTokens(connection, (results) => {
-    //   res.json(results);
-    // });
-    // return;
-    dbHelper.getByAccessToken(connection, req.body.access_token, (result) => {
+    try {
+      const result = await authUtils.verifyJokaAuthToken(req.body.access_token);
+      
       if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
         res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result));
         res.status(200).send(values.INFO.VALID_TOKEN);
       } else {
         res.status(401).send(values.ERROR.INVALID_TOKEN);
       }
-    });
+    } catch (err) {
+      res.status(500).send(values.ERROR.INVALID_TOKEN);
+    }
+
   }
 });
 
 // Deletes token from DB. Returns ok even if token is not preesnt id db
 Router.post("/logout", async (req, res) => {
-  console.log("/api/logout hit...");
 
   const token = req.headers[values.SECURITY.AUTH_TOKEN];
   try {
     await dbHelper.deleteAccessToken(connection, token);
     res.status(200).send(values.INFO.LOGGED_OUT_SUCCESS);
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(401).send(values.ERROR.INVALID_TOKEN);
   }
 });
 
 Router.get("/resetPasswordToken", async (req, res) => {
-  console.log("/api/auth/resetPasswordToken hit...", req.query);
 
   const user_id = req.query[values.SECURITY.USER_ID];
   try {
     const user_data = await ldapService.getUserDataForPasswordReset(user_id);
     const reset_password_token = await authUtils.createPasswordResetToken(user_data[values.LDAP.DN]);
     const user_email = user_data[values.LDAP.EMAIL];
-    
+
     await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
-    
+
     res.status(200).send(utils.isDevMode() ? reset_password_token : user_email);
   } catch (err) {
     if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
@@ -133,7 +130,6 @@ Router.get("/resetPasswordToken", async (req, res) => {
 });
 
 Router.get("/verifyResetToken", async (req, res) => {
-  console.log("/api/auth/verifyResetToken hit...", req.query);
 
   const reset_password_token = req.query[values.SECURITY.RESET_PASSWORD_TOKEN];
   if (!reset_password_token) return res.status(400).send(values.ERROR.INVALID_TOKEN);
@@ -149,7 +145,6 @@ Router.get("/verifyResetToken", async (req, res) => {
 });
 
 Router.post("/resetPassword", async (req, res) => {
-  console.log("/api/auth/verifyResetToken hit...", req.body);
   const data = req.body;
   const reset_password_token = data[values.SECURITY.RESET_PASSWORD_TOKEN];
   const password = data[values.SECURITY.PASSWORD];

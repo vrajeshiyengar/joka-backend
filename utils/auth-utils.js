@@ -11,11 +11,40 @@ module.exports = {
             try {
                 dbHelper.getByAccessToken(connection, token, (result) => {
                     if (!result) return reject()
+
                     if (result.expiry && result.expiry <= utils.getTimeStamps()) {
-                        // Need to renew token in db here if expiry is soon
-                        return reject()
+                        return reject();
                     }
-                    return resolve(result)
+                    const expiryTimeObj = new Date(result.expiry);
+                    const currentTimeObj = new Date(utils.getTimeStamps());
+                    const ttl_in_seconds = (expiryTimeObj.getTime() - currentTimeObj.getTime()) / 1000;
+
+                    // Creating new token if old one is close to expiry
+                    const renewal_threshold_in_seconds = process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS ?
+                        parseFloat(process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS) * 60 : 60;
+
+                    if (ttl_in_seconds <= renewal_threshold_in_seconds) {
+                        const ts = utils.getTimeStamps(true, 1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
+                        const at = utils.generateToken(100);
+                        let dataObj = {
+                            access_token: at,
+                            user_id: result.user_id,
+                            email: result.email,
+                            fullname: result.fullname,
+                            created: ts[0],
+                            expiry: ts[1]
+                        };
+                        dbHelper.insertAccessToken(connection, dataObj, async (res) => {
+                            try {
+                                await dbHelper.deleteAccessToken(connection, result.access_token);
+                            } catch (err) {
+                                console.error(err);
+                            }
+                            return resolve(res);
+                        });
+                    } else {
+                        return resolve(result)
+                    }
                 });
             } catch (err) {
                 return reject();
@@ -39,7 +68,7 @@ module.exports = {
                 await dbHelper.insertResetToken(connection, dataObject);
                 resolve(reset_password_token);
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 reject(err);
             }
         });
@@ -51,7 +80,7 @@ module.exports = {
                 const dn = await dbHelper.getDnFromResetToken(connection, reset_password_token);
                 resolve(dn);
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 reject(err);
             }
         });
@@ -62,7 +91,7 @@ module.exports = {
                 await dbHelper.deleteResetToken(connection, reset_password_token);
                 resolve();
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 reject(err);
             }
         });

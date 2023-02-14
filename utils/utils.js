@@ -38,53 +38,11 @@ module.exports = {
     // expiryMilliseconds = 1000 * 60 * 60 * 24 * 3, // 3 days
     date = new Date(),
   ) {
-    const pad = function (num) {
-      return (num < 10 ? "0" : "") + num;
-    };
-
     const expiryDate = new Date(date);
     expiryDate.setMilliseconds(
       expiryDate.getMilliseconds() + expiryMilliseconds
     );
-    return returnExpiry
-      ? [
-          date.getFullYear() +
-            "-" +
-            pad(date.getMonth() + 1) +
-            "-" +
-            pad(date.getDate()) +
-            "T" +
-            pad(date.getHours()) +
-            ":" +
-            pad(date.getMinutes()) +
-            ":" +
-            pad(date.getSeconds()) +
-            "Z",
-          expiryDate.getFullYear() +
-            "-" +
-            pad(expiryDate.getMonth() + 1) +
-            "-" +
-            pad(expiryDate.getDate()) +
-            "T" +
-            pad(expiryDate.getHours()) +
-            ":" +
-            pad(expiryDate.getMinutes()) +
-            ":" +
-            pad(expiryDate.getSeconds()) +
-            "Z",
-        ]
-      : date.getFullYear() +
-          "-" +
-          pad(date.getMonth() + 1) +
-          "-" +
-          pad(date.getDate()) +
-          "T" +
-          pad(date.getHours()) +
-          ":" +
-          pad(date.getMinutes()) +
-          ":" +
-          pad(date.getSeconds()) +
-          "Z";
+    return returnExpiry ? [date.toISOString(), expiryDate.toISOString()] : date.toISOString();
   },
   isDevMode: () => {
     return (process.env.NODE_ENV !== "production");
