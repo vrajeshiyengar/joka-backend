@@ -6,7 +6,6 @@ const utils = require("../utils/utils");
 
 // checking for joka-auth-token in headers
 Router.use(async (req, res, next) => {
-  console.info('\n\nTimestamp:', new Date().toString());
   console.info('URL hit:', req.originalUrl);
   console.info('Request Method', req.method);
   console.info('Request Params', req.query);
@@ -21,7 +20,7 @@ Router.use(async (req, res, next) => {
     return res.status(401).send(values.ERROR.TOKEN_MISSING);
   }
 
-  console.debug("Validating joka_auth_token =>", joka_auth_token);
+  console.log("Validating joka_auth_token =>", joka_auth_token);
   let user_token = ''
   try {
     user_token = await authUtils.verifyJokaAuthToken(joka_auth_token);
@@ -30,7 +29,7 @@ Router.use(async (req, res, next) => {
     return res.status(401).send(values.ERROR.INVALID_TOKEN);
   }
   if (!user_token) return res.status(401).send(values.ERROR.INVALID_TOKEN);
-  console.debug("Validated joka_auth_token =>", user_token["access_token"]);
+  console.log("Validated joka_auth_token =>", user_token["access_token"]);
 
   res.setHeader(values.SECURITY.AUTH_TOKEN, user_token["access_token"]);
   res.setHeader(values.SECURITY.USER_ID, user_token["user_id"]);

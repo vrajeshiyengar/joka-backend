@@ -13,7 +13,7 @@ module.exports = {
             const deleteSql = `DELETE FROM AccessToken WHERE access_token = '${x.access_token}'`;
             connection.query(deleteSql, function (err, result) {
               if (err) throw err;
-              if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken`)
+              if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken table`)
             });
           }
         });
@@ -66,7 +66,7 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE expiry <= "${now}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from ResetPasswordToken`)
+        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from ResetPasswordToken table`)
         resolve();
       });
     });
@@ -98,7 +98,7 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE reset_password_token = "${reset_password_token}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${reset_password_token} was deleted from ResetPasswordToken`)
+        if (result && result.affectedRows) console.log(`${reset_password_token} was deleted from ResetPasswordToken table`)
         resolve();
       });
     });

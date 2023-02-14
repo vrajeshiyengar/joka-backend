@@ -68,7 +68,7 @@ module.exports = {
                 await dbHelper.insertResetToken(connection, dataObject);
                 resolve(reset_password_token);
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 reject(err);
             }
         });
@@ -80,7 +80,7 @@ module.exports = {
                 const dn = await dbHelper.getDnFromResetToken(connection, reset_password_token);
                 resolve(dn);
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 reject(err);
             }
         });
@@ -91,7 +91,7 @@ module.exports = {
                 await dbHelper.deleteResetToken(connection, reset_password_token);
                 resolve();
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 reject(err);
             }
         });

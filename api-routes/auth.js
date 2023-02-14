@@ -10,7 +10,6 @@ const values = require('../constants/values')
 const Router = express.Router();
 
 Router.post("/login", (req, res) => {
-  console.log("/api/login hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.username) {
     res.status(400).json({
@@ -69,14 +68,13 @@ Router.post("/login", (req, res) => {
         }
       })
       .catch((error) => {
-        console.log("error", error);
+        console.error(error);
         res.status(500).send(error);
       });
   }
 });
 
 Router.post("/verifyAccessToken", async (req, res) => {
-  console.log("/api/verifyAccessToken hit...");
   dbHelper.refreshAccessTokens(connection);
   if (!req.body.access_token) {
     res.status(500).json({
@@ -103,20 +101,18 @@ Router.post("/verifyAccessToken", async (req, res) => {
 
 // Deletes token from DB. Returns ok even if token is not preesnt id db
 Router.post("/logout", async (req, res) => {
-  console.log("/api/logout hit...");
 
   const token = req.headers[values.SECURITY.AUTH_TOKEN];
   try {
     await dbHelper.deleteAccessToken(connection, token);
     res.status(200).send(values.INFO.LOGGED_OUT_SUCCESS);
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(401).send(values.ERROR.INVALID_TOKEN);
   }
 });
 
 Router.get("/resetPasswordToken", async (req, res) => {
-  console.log("/api/auth/resetPasswordToken hit...", req.query);
 
   const user_id = req.query[values.SECURITY.USER_ID];
   try {
@@ -134,7 +130,6 @@ Router.get("/resetPasswordToken", async (req, res) => {
 });
 
 Router.get("/verifyResetToken", async (req, res) => {
-  console.log("/api/auth/verifyResetToken hit...", req.query);
 
   const reset_password_token = req.query[values.SECURITY.RESET_PASSWORD_TOKEN];
   if (!reset_password_token) return res.status(400).send(values.ERROR.INVALID_TOKEN);
@@ -150,7 +145,6 @@ Router.get("/verifyResetToken", async (req, res) => {
 });
 
 Router.post("/resetPassword", async (req, res) => {
-  console.log("/api/auth/verifyResetToken hit...", req.body);
   const data = req.body;
   const reset_password_token = data[values.SECURITY.RESET_PASSWORD_TOKEN];
   const password = data[values.SECURITY.PASSWORD];
