@@ -6,7 +6,7 @@
   "scripts": {
     "pm2start": "pm2 start ecosystem.config.js --env development",
     "pm2check": "pm2 status joka-backend",
-    "pm2logs": "pm2 logs joka-backend",
+    "pm2logs": "pm2 logs joka-backend --lines 100",
     "pm2stop": "pm2 delete joka-backend",
     "pm2restart": "pm2 restart joka-backend",
 
