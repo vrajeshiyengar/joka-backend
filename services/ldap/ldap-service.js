@@ -8,6 +8,7 @@ const ldapDataService = require('./ldap-data-service/ldap-data-service');
 const ldapUtils = require("../../utils/ldap-utils");
 const values = require('../../constants/values');
 
+
 class LdapService {
 
     async authenticateUser(username, password) {
