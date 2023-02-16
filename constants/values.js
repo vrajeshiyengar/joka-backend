@@ -1,0 +1,77 @@
+module.exports = {
+    ERROR: {
+        INVALID_USER_ID: "Invalid User ID",
+        USER_ID_NOT_UNIQUE: "User ID is not unique",
+        INVALID_CREDENTIALS: "Invalid Credentials",
+        PASSWORD_RESET_NOT_DONE: "Your Password could not be updated",
+        INVALID_SEARCH_TYPE: "Invalid Search Type",
+        USER_NOT_FOUND: "User Not Found",
+        USER_DN_MISSING: "User Identifier Missing",
+        EDIT_PROFILE_ACCESS_MISSING: "Editing this profile is not allowed",
+        USER_ID_MISMATCH: "Logged-in user is different",
+        INVALID_TOKEN: "Token Validation Failed",
+        PROFILE_NOT_UPDATED: "Profile was not updated",
+        INVALID_PASSWORD: "You have provided an invalid password",
+        TOKEN_MISSING: "Token Missing",
+        SERVER_ERROR_FOR_TOKEN: "Server error while validating token"
+    },
+    INFO: {
+        PASSWORD_RESET_DONE: "Your Password has been updated",
+        USER_ID_EXISTS: "User ID exists",
+        USER_DATA_UPDATED: "User data has been updated",
+        LOGGED_OUT_SUCCESS: "User has been logged out",
+        LOG_IN_SUCCESS: "User has been logged in",
+        EXISTING_LOG_IN: "User is already logged in",
+        VALID_TOKEN: "Valid Token"
+    },
+    LDAP: {
+        SN: "sn",
+        PASSWORD: "userPassword",
+        DN: "dn",
+        EMAIL: "mail",
+        CN: "cn",
+        DISPLAY_NAME: "displayName",
+        REG_NO: "regno",
+        ALT_EMAIL: "altemail",
+        MOBILE: "mobile",
+        ROOM_NO: "roomnumber",
+        HOSTEL: "hostel",
+        COMPANY: "company",
+        BATCH: "batch",
+        OFFICE_CITY: "officecity",
+        HOME_CITY: "homecity",
+    },
+    JD: {
+        NAME: "NAME",
+        REG_NO: "REG_NO",
+        EMAIL: "EMAIL",
+        ALT_EMAIL: "ALT_EMAIL",
+        MOBILE: "MOBILE",
+        ROOM_NO: "MOBILE",
+        HOSTEL: "HOSTEL",
+        COMPANY: "COMPANY",
+        BATCH: "BATCH",
+        OFFICE_CITY: "OFFICE_CITY",
+        HOME_CITY: "HOME_CITY",
+        PGP_LABEL: "PGP",
+        PGPEX_LABEL: "PGPEX",
+        FP_LABEL: "FP",
+        FACULTY_STAFF_TTA_LABEL: "FACULTY/STAFF/TTA",
+        ALUMNI_LABEL: "ALUMNI",
+        PGDBA_LABEL: "PGDBA",
+        PGPEX_LC: "pgpex", //LC stands for Lower Case
+        FP_LC: "fp",
+        ALUMNI_LC: "alumni",
+        PGDBA_LC: "pgdba",
+        UI_GROUP: "UI_GROUP",
+        EDIT_PROFILE_ACCESS: "EDIT_PROFILE_ACCESS",
+        CN: "CN"
+    },
+    SECURITY: {
+        AUTH_TOKEN: "joka_auth_token", //header keys need to be in lower case
+        USER_ID: "user_id",
+        RESET_PASSWORD_TOKEN: "reset_password_token",
+        PASSWORD: "password",
+        ACCESS_CONTROL_EXPOSE_HEADERS:"Access-Control-Expose-Headers"
+    }
+};
