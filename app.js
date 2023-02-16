@@ -15,20 +15,20 @@ app.use(
   })
 );
 
-if (utils.isDevMode()) app.use(cors())
+if (!utils.isProdMode()) app.use(cors())
 
 app.use("/api", routes);
 
 app.listen(port, () =>
   console.log(
-    `\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\nJokaBackend listening on port ${port}!\nProduction Mode: ${!utils.isDevMode()}`
+    `\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\nJokaBackend listening on port ${port}!\nProduction Mode: ${process.env.NODE_ENV}\n`
   )
 );
 
 app.use((err, req, res, next) => {
   if (err) {
     console.error('****Server Error****\n\n', err.stack);
-    if (!utils.isDevMode()) {
+    if (utils.isProdMode()) {
       return res.status(500).send('Server Error');
     }
     return res.status(500).json({ error: 'Server Error', error_stack: err.stack });

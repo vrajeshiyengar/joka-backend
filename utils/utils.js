@@ -45,6 +45,12 @@ module.exports = {
     return returnExpiry ? [date.toISOString(), expiryDate.toISOString()] : date.toISOString();
   },
   isDevMode: () => {
-    return (process.env.NODE_ENV !== "production");
+    return (process.env.NODE_ENV == "development");
+  },
+  isProdMode: () => {
+    return (process.env.NODE_ENV == "production");
+  },
+  isLocalMode: () => {
+    return (process.env.NODE_ENV == "local");
   }
 };
