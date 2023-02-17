@@ -1,11 +1,12 @@
-const mysql = require("mysql");
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
-
-const ApiRoutes = require("./routes/api");
-
+const routes = require("./api-routes/routes");
 const app = express();
 const port = process.env.PORT || 3000;
+const cors = require("cors")
+const utils = require("./utils/utils")
 
 app.use(bodyParser.json());
 app.use(
@@ -14,31 +15,22 @@ app.use(
   })
 );
 
-app.use("/api", ApiRoutes);
-// const mySqlConnection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "isg@123##",
-//   database: "JokaAuth",
-//   port: 3306,
-//   multipleStatements: true,
-// });
+if (!utils.isProdMode()) app.use(cors())
 
-const mySqlConnection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "1234567890",
-  database: "JokaAuth",
-  multipleStatements: true,
-});
+app.use("/api", routes);
 
-mySqlConnection.connect((err) => {
-  if (!err) {
-    console.log("JokaAuth DB connection established");
-  } else {
-    console.log("JokaAuth DB connection failed!");
-    console.log(err);
+app.listen(port, () =>
+  console.log(
+    `\nWelcome to JokaBackend!!\nDeveloped by ISG, IIM Calcutta\nJokaBackend listening on port ${port}!\nProduction Mode: ${process.env.NODE_ENV}\n`
+  )
+);
+
+app.use((err, req, res, next) => {
+  if (err) {
+    console.error('****Server Error****\n\n', err.stack);
+    if (utils.isProdMode()) {
+      return res.status(500).send('Server Error');
+    }
+    return res.status(500).json({ error: 'Server Error', error_stack: err.stack });
   }
 });
-
-app.listen(port, () => console.log(`JokaAuth listening on port ${port}!`));

@@ -1,29 +1,42 @@
 {
-  "name": "joka-auth-node",
+  "name": "joka-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js --watch",
-    "restart": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}') && node app.js --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pm2start": "pm2 start ecosystem.config.js --env development",
+    "pm2check": "pm2 status joka-backend",
+    "pm2logs": "pm2 logs joka-backend --lines 200",
+    "pm2stop": "pm2 delete joka-backend",
+    "pm2restart": "pm2 reload joka-backend",
+
+    "start": "nohup node app.js --watch >> log.txt 2>> log.txt &",
+    "check": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
+    "logs": "watch tail -n 50 log.txt",
+    "stop": "kill -9 $(ps aux | grep '\\snode\\s' | awk '{print $2}')",
+    "restart": "npm run stop && npm run start"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vrajeshiyengar/joka-auth-node.git"
+    "url": "git+https://github.com/vrajeshiyengar/joka-backend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vrajeshiyengar/joka-auth-node/issues"
+    "url": "https://github.com/vrajeshiyengar/joka-backend/issues"
   },
-  "homepage": "https://github.com/vrajeshiyengar/joka-auth-node#readme",
+  "homepage": "https://github.com/vrajeshiyengar/joka-backend#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.7",
+    "ldapjs": "^2.3.3",
+    "md5": "^2.3.0",
     "mysql": "^2.18.1",
+    "nodemailer": "^6.9.1",
     "request": "^2.88.2"
   },
   "devDependencies": {
