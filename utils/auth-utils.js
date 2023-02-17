@@ -95,5 +95,12 @@ module.exports = {
                 reject(err);
             }
         });
+    },
+    generateSuccessJson: (message) => {
+        return {message: message};
+    },
+    generateErrorJson: (error) => {
+        if (error instanceof Error) return {error: error.message};
+        return {error: error};
     }
 }
