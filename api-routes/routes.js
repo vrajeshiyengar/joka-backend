@@ -11,6 +11,9 @@ Router.use(async (req, res, next) => {
   console.info('Request Params', req.query);
   console.info('Request Data', req.body);
 
+  // Allowing token in header to be read by browsers
+  res.setHeader(values.SECURITY.ACCESS_CONTROL_EXPOSE_HEADERS, values.SECURITY.AUTH_TOKEN);
+
   // Skipping token validation for auth urls
   if (req.url.startsWith("/auth")) return next();
 

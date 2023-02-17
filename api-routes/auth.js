@@ -10,68 +10,43 @@ const values = require('../constants/values')
 const Router = express.Router();
 
 Router.post("/login", (req, res) => {
+  // Need to await here
   dbHelper.refreshAccessTokens(connection);
-  if (!req.body.username) {
-    res.status(400).json({
-      status: 400,
-      error: "No username provided",
-      message: "Please provide a username",
-    });
-  } else if (!req.body.password) {
-    res.status(400).json({
-      status: 400,
-      error: "No password provided",
-      message: "Please provide a password",
-    });
-  } else {
-    ldapService
-      .authenticateUser(req.body.username, req.body.password)
-      .then((response) => {
-        if (!response.status) {
-          res.status(401).json({
-            status: 401,
-            error: values.ERROR.INVALID_CREDENTIALS,
-            message: response.message,
-          });
-        } else {
-          const ts = utils.getTimeStamps(true, 1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
-          const at = utils.generateToken(100);
-          dbHelper.getAccessTokenByUserId(
-            connection,
-            response.attributes.user_id,
-            (result) => {
-              if (result) {
-                res.setHeader(
-                  values.SECURITY.AUTH_TOKEN,
-                  JSON.stringify(result)
-                );
-                res.status(200).send(values.INFO.EXISTING_LOG_IN);
-              } else {
-                let loginObj = {
-                  access_token: at,
-                  user_id: response.attributes.user_id,
-                  email: response.attributes.email,
-                  fullname: response.attributes.fullname,
-                  created: ts[0],
-                  expiry: ts[1],
-                };
-                dbHelper.insertAccessToken(connection, loginObj, (result) => {
-                  res.setHeader(
-                    values.SECURITY.AUTH_TOKEN,
-                    JSON.stringify(result)
-                  );
-                  res.status(200).send(values.INFO.LOG_IN_SUCCESS);
-                });
-              }
-            }
-          );
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send(error);
+  if (!req.body.username)
+    return res.status(400).send("No username provided");
+  
+  if (!req.body.password) 
+    return res.status(400).send("No password provided");
+
+  ldapService.authenticateUser(req.body.username, req.body.password)
+    .then((response) => {
+      if (!response.status) return res.status(401).send(values.ERROR.INVALID_CREDENTIALS);
+
+      const ts = utils.getTimeStamps(true, 1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS));
+      const at = utils.generateToken(100);
+
+      let loginObj = {
+        access_token: at,
+        user_id: response.attributes.user_id,
+        email: response.attributes.email,
+        fullname: response.attributes.fullname,
+        created: ts[0],
+        expiry: ts[1],
+      };
+
+      dbHelper.insertAccessToken(connection, loginObj, (result) => {
+        res.setHeader(
+          values.SECURITY.AUTH_TOKEN,
+          JSON.stringify(result)
+        );
+        res.status(200).send(values.INFO.LOG_IN_SUCCESS);
       });
-  }
+
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send(error);
+    });
 });
 
 Router.post("/verifyAccessToken", async (req, res) => {
@@ -85,7 +60,7 @@ Router.post("/verifyAccessToken", async (req, res) => {
   } else {
     try {
       const result = await authUtils.verifyJokaAuthToken(req.body.access_token);
-      
+
       if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
         res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result));
         res.status(200).send(values.INFO.VALID_TOKEN);
@@ -122,7 +97,7 @@ Router.get("/resetPasswordToken", async (req, res) => {
 
     await emailService.sendEmailForPasswordReset(user_email, reset_password_token);
 
-    res.status(200).send(utils.isDevMode() ? reset_password_token : user_email);
+    res.status(200).send(utils.isLocalMode() ? reset_password_token : user_email);
   } catch (err) {
     if (err.message == values.ERROR.INVALID_USER_ID) return res.status(400).send(err.message);
     res.status(500).send(err.message);

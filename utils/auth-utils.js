@@ -53,8 +53,8 @@ module.exports = {
     },
     createPasswordResetToken: async (dn) => {
         return new Promise(async (resolve, reject) => {
-            const ts = utils.getTimeStamps(returnExpiry = true, expiryMilliseconds = 1000 * 60 * 10); // 10 mins
-            // const ts = utils.getTimeStamps(returnExpiry = true, expiryMilliseconds = 1000 * 60 * 30);
+            const expiryInMilliSeconds = 1000 * 60 * process.env.PASSWORD_RESET_TOKEN_LIFTEIME_IN_MINS;
+            const ts = utils.getTimeStamps(true, expiryInMilliSeconds);
             const reset_password_token = utils.generateToken(100);
             if (!dn) return reject("No DN received")
             try {

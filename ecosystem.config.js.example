@@ -1,0 +1,100 @@
+module.exports = {
+    apps: [{
+        name: "joka-backend",
+        script: "./app.js",
+        exp_backoff_restart_delay: 100,
+        instances: 2,
+        merge_logs: true,
+        exec_mode: "cluster",
+        watch: true,
+        log_date_format: "YYYY-MM-DD HH:mm:ss Z",
+        time: true,
+        ignore_watch: ['logs', 'ecosystem.config.js', 'package.json'],
+        log_file: "./logs/joka-backend-logs.txt",
+
+        /* All env values are read as string by node */
+        env_production: {
+            NODE_ENV: 'production',
+            PORT: '<port>',
+
+            /* MYSQL Configs */
+            DB_HOST: 'localhost',
+            DB_USER: 'root',
+            DB_PASSWORD: '<mysql password>',
+            DB_NAME: 'JokaBackend',
+            DB_PORT: '3306',
+
+            /* LDAP Configs */
+            LDAP_URL: '<ldap url>',
+            LDAP_BASE_DN: 'dc=iimcal,dc=ac,dc=in',
+            LDAP_BIND_DN: 'cn=admin,dc=iimcal,dc=ac,dc=in',
+            LDAP_BIND_CREDENTIAL: '<ldap admin password>',
+            /* Attribute names must have double-quotes so that JSON.parse can read them - names are not case-sensitive here */
+            ALL_ATTRIBUTES: '["attribute1", "attribute2"]',
+
+            SEND_RESET_EMAIL_TO_USER: true,
+            EMAIL_ID: 'noreply@email.iimcal.ac.in',
+            EMAIL_PASSWORD: '<email app code>',
+            AUTH_TOKEN_LIFTEIME_IN_MINS: '10',
+            AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS: '2',
+            PASSWORD_RESET_APP_LINK: 'http://ec2-43-204-240-96.ap-south-1.compute.amazonaws.com/passwordResetApp/#/reset', /* Don't put trailing slash */
+            PASSWORD_RESET_TOKEN_LIFTEIME_IN_MINS: '10'
+        },
+        /* All env values are read as string by node */
+        env_development: {
+            NODE_ENV: 'development',
+            PORT: '<port>',
+
+            /* MYSQL Configs */
+            DB_HOST: 'localhost',
+            DB_USER: 'root',
+            DB_PASSWORD: '<mysql password>',
+            DB_NAME: 'JokaBackend',
+            DB_PORT: '3306',
+
+           /* LDAP Configs */
+            LDAP_URL: '<ldap url>',
+            LDAP_BASE_DN: 'dc=iimcal,dc=ac,dc=in',
+            LDAP_BIND_DN: 'cn=admin,dc=iimcal,dc=ac,dc=in',
+            LDAP_BIND_CREDENTIAL: '<ldap admin password>',
+            /* Attribute names must have double-quotes so that JSON.parse can read them - names are not case-sensitive here */
+            ALL_ATTRIBUTES: '["attribute1", "attribute2"]',
+
+            SEND_RESET_EMAIL_TO_USER: false,
+            EMAIL_ID: 'noreply@email.iimcal.ac.in',
+            EMAIL_PASSWORD: '<email app code>',
+            AUTH_TOKEN_LIFTEIME_IN_MINS: '10',
+            AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS: '2',
+            PASSWORD_RESET_APP_LINK: 'http://ec2-43-204-240-96.ap-south-1.compute.amazonaws.com/passwordResetApp/#/reset', /* Don't put trailing slash */
+            PASSWORD_RESET_TOKEN_LIFTEIME_IN_MINS: '10'
+        },
+        /* All env values are read as string by node */
+        env: {
+            NODE_ENV: 'local',
+            PORT: '<port>',
+
+            /* MYSQL Configs */
+            DB_HOST: 'localhost',
+            DB_USER: 'root',
+            DB_PASSWORD: '<mysql password>',
+            DB_NAME: 'JokaBackend',
+            DB_PORT: '3306',
+
+            /* LDAP Configs */
+            LDAP_URL: '<ldap url>',
+            LDAP_BASE_DN: 'dc=iimcal,dc=ac,dc=in',
+            LDAP_BIND_DN: 'cn=admin,dc=iimcal,dc=ac,dc=in',
+            LDAP_BIND_CREDENTIAL: '<ldap admin password>',
+            /* Attribute names must have double-quotes so that JSON.parse can read them - names are not case-sensitive here */
+            ALL_ATTRIBUTES: '["attribute1", "attribute2"]',
+
+            SEND_RESET_EMAIL_TO_USER: false,
+            EMAIL_ID: 'noreply@email.iimcal.ac.in',
+            EMAIL_PASSWORD: '<email app code>',
+            AUTH_TOKEN_LIFTEIME_IN_MINS: '10',
+            AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS: '2',
+            PASSWORD_RESET_APP_LINK: 'http://localhost:<port>/passwordResetApp/#/reset', /* Don't put trailing slash */
+            PASSWORD_RESET_TOKEN_LIFTEIME_IN_MINS: '10'
+        }
+    }]
+}

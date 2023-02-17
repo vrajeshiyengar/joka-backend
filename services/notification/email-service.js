@@ -20,7 +20,7 @@ class EmailService {
             let mail_html = `<br><p style="font-size: 18px; font-family:verdana;">Click <a href="${front_end_link}/${reset_password_token}">here</a> to reset your password for BB/Courseweb</p>`
             const mailOptions = {
                 from: 'noreply@email.iimcal.ac.in',
-                to: utils.isDevMode() ? 'noreply@email.iimcal.ac.in' : receiverEmailId,
+                to: (utils.isProdMode() && process.env.SEND_RESET_EMAIL_TO_USER == 'true') ? receiverEmailId : 'noreply@email.iimcal.ac.in',
                 subject: 'Password Reset Link',
                 html: mail_html
             };
