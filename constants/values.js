@@ -71,6 +71,7 @@ module.exports = {
         AUTH_TOKEN: "joka_auth_token", //header keys need to be in lower case
         USER_ID: "user_id",
         RESET_PASSWORD_TOKEN: "reset_password_token",
-        PASSWORD: "password"
+        PASSWORD: "password",
+        ACCESS_CONTROL_EXPOSE_HEADERS:"Access-Control-Expose-Headers"
     }
 };
