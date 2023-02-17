@@ -2,10 +2,10 @@
  * Created on 04.02.2023
  * Modified from https://github.com/jxjj/simple-ldap-search/tree/master/lib
  * npm package - https://www.npmjs.com/package/simple-ldap-search v3.1.2
- *  
-*/
+ *
+ */
 
-const { arrayIncludesFunction } = require('./arrayIncludesFunction.js')
+const { arrayIncludesFunction } = require("./arrayIncludesFunction.js");
 
 /**
  * Adds an event listener to an emitter only if not already present
@@ -28,5 +28,5 @@ module.exports = {
     if (arrayIncludesFunction(listenersArray, fn)) return;
 
     eventEmitter.on(eventName, fn);
-  }
-}
+  },
+};
