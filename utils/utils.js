@@ -32,19 +32,21 @@ module.exports = {
   getTimeStamps(
     returnExpiry = false,
     // expiryMilliseconds = 1000 * 20, // 20 seconds
-    expiryMilliseconds = 1000 * 60 * 5, // 5 minutes
+    // expiryMilliseconds = 1000 * 60 * 5, // 5 minutes
     // expiryMilliseconds = 1000 * 60 * 60, // 1 hour
-    // expiryMilliseconds = 1000 * 60 * 60 * 24, // 1 day
+    expiryMilliseconds = 1000 * 60 * 60 * 24, // 1 day
     // expiryMilliseconds = 1000 * 60 * 60 * 24 * 3, // 3 days
-    date = new Date(),
+    date = new Date()
   ) {
     const expiryDate = new Date(date);
     expiryDate.setMilliseconds(
       expiryDate.getMilliseconds() + expiryMilliseconds
     );
-    return returnExpiry ? [date.toISOString(), expiryDate.toISOString()] : date.toISOString();
+    return returnExpiry
+      ? [date.toISOString(), expiryDate.toISOString()]
+      : date.toISOString();
   },
   isDevMode: () => {
-    return (process.env.NODE_ENV !== "production");
-  }
+    return process.env.NODE_ENV !== "production";
+  },
 };

@@ -13,7 +13,10 @@ module.exports = {
             const deleteSql = `DELETE FROM AccessToken WHERE access_token = '${x.access_token}'`;
             connection.query(deleteSql, function (err, result) {
               if (err) throw err;
-              if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken table`)
+              if (result && result.affectedRows)
+                console.log(
+                  `${result.affectedRows} records were deleted from AccessToken table`
+                );
             });
           }
         });
@@ -27,7 +30,7 @@ module.exports = {
       callback(result);
     });
   },
-  getByAccessToken: (connection, access_token = "access", callback) => {
+  getByAccessToken: (connection, access_token = "", callback) => {
     var sql = `SELECT * FROM AccessToken WHERE access_token = '${access_token}'`;
     connection.query(sql, function (err, result) {
       if (err) throw err;
@@ -66,7 +69,10 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE expiry <= "${now}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from ResetPasswordToken table`)
+        if (result && result.affectedRows)
+          console.log(
+            `${result.affectedRows} records were deleted from ResetPasswordToken table`
+          );
         resolve();
       });
     });
@@ -98,9 +104,38 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE reset_password_token = "${reset_password_token}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${reset_password_token} was deleted from ResetPasswordToken table`)
+        if (result && result.affectedRows)
+          console.log(
+            `${reset_password_token} was deleted from ResetPasswordToken table`
+          );
         resolve();
       });
     });
-  }
+  },
+  getCurrentUser: async (connection) => {
+    return new Promise((resolve, reject) => {
+      var sql = `SELECT id FROM JokaTimetableUsers;`;
+      connection.query(sql, function (err, result) {
+        console.log(result);
+        if (err) return reject(err);
+        if (result.length) {
+          resolve(result.map((x) => x.id));
+        }
+        resolve([]);
+      });
+    });
+  },
+  getUserIds: async (connection) => {
+    return new Promise((resolve, reject) => {
+      var sql = `SELECT id FROM JokaTimetableUsers;`;
+      connection.query(sql, function (err, result) {
+        console.log(result);
+        if (err) return reject(err);
+        if (result.length) {
+          resolve(result.map((x) => x.id));
+        }
+        resolve([]);
+      });
+    });
+  },
 };
