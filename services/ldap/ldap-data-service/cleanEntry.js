@@ -1,5 +1,5 @@
 /**
- * Created by ISG on 04.02.2023
+ * Created on 04.02.2023
  * @borrows from https://github.com/jxjj/simple-ldap-search/tree/master/lib
  * npm package - https://www.npmjs.com/package/simple-ldap-search v3.1.2
  *
