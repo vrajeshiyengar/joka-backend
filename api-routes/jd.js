@@ -15,6 +15,7 @@ router.get("/users", async (req, res) => {
         const users = await jdService.searchUsers(searchValue, searchType, loggedInUserId);
         res.status(200).json(users);
     } catch (err) {
+        console.error(err);
         res.status(500).send(err.message);
     }
 });
@@ -35,6 +36,7 @@ router.post("/updateUser", async (req, res) => {
             res.status(500).send(values.ERROR.PROFILE_NOT_UPDATED);
         }
     } catch (err) {
+        console.error(err);
         res.status(500).send(err.message);
     }
 })

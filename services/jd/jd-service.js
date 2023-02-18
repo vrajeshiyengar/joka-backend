@@ -70,8 +70,6 @@ class JDService {
         }
         const users = await ldapDataService.search(filter);
 
-        if (users.length === 0) throw new Error(values.ERROR.USER_NOT_FOUND)
-
         return users.map(user => this.modifyUserObjectForJD(user, loggedInUserId));
     }
 
