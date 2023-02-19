@@ -34,6 +34,27 @@ class EmailService {
             });
         });
     }
+
+    async sendConfirmationEmailForPasswordReset(receiverEmailId) {
+        return new Promise((resolve, reject) => {
+
+            let mail_html = `<br><p style="font-size: 18px; font-family:verdana;">Your password for BB/Courseweb was reset</p>`
+            const mailOptions = {
+                from: 'noreply@email.iimcal.ac.in',
+                to: (utils.isProdMode() && process.env.SEND_RESET_EMAIL_TO_USER == 'true') ? receiverEmailId : 'noreply@email.iimcal.ac.in',
+                subject: 'Password Reset Confirmation',
+                html: mail_html
+            };
+
+            this.transporter.sendMail(mailOptions, function (error, result) {
+                if (error) return reject(error);
+
+                console.log('Password reset email sent to:', mailOptions.to);
+                console.log(result.response);
+                resolve();
+            });
+        });
+    }
 }
 
 module.exports = new EmailService();

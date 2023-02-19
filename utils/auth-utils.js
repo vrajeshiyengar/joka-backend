@@ -53,7 +53,7 @@ module.exports = {
     },
     createPasswordResetToken: async (dn) => {
         return new Promise(async (resolve, reject) => {
-            const expiryInMilliSeconds = 1000 * 60 * process.env.PASSWORD_RESET_TOKEN_LIFTEIME_IN_MINS;
+            const expiryInMilliSeconds = 1000 * 60 * parseFloat(process.env.PASSWORD_RESET_TOKEN_LIFTEIME_IN_MINS);
             const ts = utils.getTimeStamps(true, expiryInMilliSeconds);
             const reset_password_token = utils.generateToken(100);
             if (!dn) return reject("No DN received")
@@ -95,5 +95,12 @@ module.exports = {
                 reject(err);
             }
         });
+    },
+    generateSuccessJson: (message) => {
+        return {message: message};
+    },
+    generateErrorJson: (error) => {
+        if (error instanceof Error) return {error: error.message};
+        return {error: error};
     }
 }

@@ -56,3 +56,5 @@ class LdapService {
         console.log(`Password was updated for ${dn}`)
     }
 }
+
+module.exports = new LdapService();

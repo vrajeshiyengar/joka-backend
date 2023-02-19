@@ -26,7 +26,7 @@ module.exports = {
 
             /* LDAP Configs */
             LDAP_URL: '<ldap url>',
-            LDAP_BASE_DN: 'dc=iimcal,dc=ac,dc=in',
+            LDAP_BASE_DN: 'ou=Person,dc=iimcal,dc=ac,dc=in',
             LDAP_BIND_DN: 'cn=admin,dc=iimcal,dc=ac,dc=in',
             LDAP_BIND_CREDENTIAL: '<ldap admin password>',
             /* Attribute names must have double-quotes so that JSON.parse can read them - names are not case-sensitive here */
