@@ -40,6 +40,11 @@ module.exports = {
         BATCH: "batch",
         OFFICE_CITY: "officecity",
         HOME_CITY: "homecity",
+        STUDENT_OUs: ['ou=Alumni','ou=FP','ou=MBA','ou=MBAEX','ou=PGDBA','ou=PGDBM','ou=PGDCM','ou=PGDM','ou=PGPEX','ou=PGPEX-VLM','ou=Student'],
+        EXCHANGE_STUDENT_OUs: ['ou=CEMS','ou=CEMSMIM','ou=MiM','ou=STEP'],
+        FACULTY_OUs: ['ou=Faculty','ou=Faculty-Alumni','ou=Faculty-Visiting'],
+        STAFF_OUs: ['ou=Staff'],
+        TTA_OUs: ['ou=TTA']
     },
     JD: {
         NAME: "NAME",
@@ -65,7 +70,13 @@ module.exports = {
         PGDBA_LC: "pgdba",
         UI_GROUP: "UI_GROUP",
         EDIT_PROFILE_ACCESS: "EDIT_PROFILE_ACCESS",
-        CN: "CN"
+        CN: "CN",
+        STUDENT_GROUP: "Students",
+        EXCHANGE_STUDENT_GROUP: "Exchange Stduents",
+        FACULTY_GROUP: "Faculty",
+        STAFF_GROUP: "Staff",
+        TTA_GROUP: "TTA",
+        OTHERS_GROUP: "Others"
     },
     SECURITY: {
         AUTH_TOKEN: "joka_auth_token", //header keys need to be in lower case
