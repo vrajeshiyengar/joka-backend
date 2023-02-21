@@ -47,7 +47,7 @@ module.exports = {
         EMAIL: "EMAIL",
         ALT_EMAIL: "ALT_EMAIL",
         MOBILE: "MOBILE",
-        ROOM_NO: "MOBILE",
+        ROOM_NO: "ROOM_NO",
         HOSTEL: "HOSTEL",
         COMPANY: "COMPANY",
         BATCH: "BATCH",
