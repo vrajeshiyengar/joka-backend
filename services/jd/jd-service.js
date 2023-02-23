@@ -120,7 +120,7 @@ class JDService {
             console.log(`Profile was updated for ${dn} on LDAP`)
         } catch (err) {
             if (!err.message) err.message = values.ERROR.PASSWORD_RESET_NOT_DONE
-            console.log(`Profile data was not updated for ${dn}. Message: ${err.message}`)
+            console.log(`Profile data was not updated for ${loggedInUserId}. Message: ${err.message}`)
             throw new Error(err.message)
         }
     }
