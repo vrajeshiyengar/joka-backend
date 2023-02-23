@@ -23,7 +23,37 @@ Router.post("/login", async (req, res) => {
     return res.status(500).json(authUtils.generateErrorJson("Error with refreshing tokens"));
   }
 
-  ldapService
+  try {
+    let response = await ldapService.authenticateUser(req.body.username, req.body.password);
+    if (!response.status)
+      return res.status(401).json(authUtils.generateErrorJson(values.ERROR.INVALID_CREDENTIALS));
+
+    const ts = utils.getTimeStamps(
+      true,
+      1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS)
+    );
+    const at = utils.generateToken(100);
+
+    let loginObj = {
+      access_token: at,
+      user_id: response.attributes.user_id,
+      email: response.attributes.email,
+      fullname: response.attributes.fullname,
+      created: ts[0],
+      expiry: ts[1],
+    };
+
+    // Need to await
+    dbHelper.insertAccessToken(connection, loginObj, (result) => {
+      res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result));
+      res.status(200).json(authUtils.generateSuccessJson(values.INFO.LOG_IN_SUCCESS));
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(authUtils.generateErrorJson(error));
+  }
+
+  /* ldapService
     .authenticateUser(req.body.username, req.body.password)
     .then((response) => {
       if (!response.status)
@@ -52,11 +82,10 @@ Router.post("/login", async (req, res) => {
     .catch((error) => {
       console.error(error);
       res.status(500).json(authUtils.generateErrorJson(error));
-    });
+    }); */
 });
 
 Router.post("/verifyAccessToken", async (req, res) => {
-
   if (!req.body.access_token)
     return res.status(500).json(authUtils.generateErrorJson(values.ERROR.TOKEN_MISSING));
 
