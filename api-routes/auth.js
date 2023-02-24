@@ -94,7 +94,7 @@ Router.post("/verifyAccessToken", async (req, res) => {
 
     if (result && result.expiry && result.expiry > utils.getTimeStamps()) {
       res.setHeader(values.SECURITY.AUTH_TOKEN, JSON.stringify(result));
-      res.status(200).json(authUtils.generateSuccessJson(values.INFO.VALID_TOKEN));
+      res.status(200).json(result);
     } else {
       console.error(values.ERROR.INVALID_TOKEN);
       res.status(401).json(authUtils.generateErrorJson(values.ERROR.INVALID_TOKEN));
