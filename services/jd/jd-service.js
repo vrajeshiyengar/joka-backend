@@ -14,7 +14,7 @@ class JDService {
         let new_user = { ...user };
 
         // Adding JD Group value for displaying in tabs. // Logic taken from previous JD codebase
-        if (user.description && user.description.toLowerCase() === values.JD.ALUMNI_LC) {
+        /* if (user.description && user.description.toLowerCase() === values.JD.ALUMNI_LC) {
             new_user[values.JD.UI_GROUP] = values.JD.ALUMNI_LABEL
         } else if (user.regno && user.regno.toString().toLowerCase().startsWith(values.JD.FP_LC)) {
             new_user[values.JD.UI_GROUP] = values.JD.FP_LABEL
@@ -26,6 +26,22 @@ class JDService {
             new_user[values.JD.UI_GROUP] = values.JD.FACULTY_STAFF_TTA_LABEL
         } else {
             new_user[values.JD.UI_GROUP] = values.JD.PGP_LABEL
+        } */
+
+        const dn = new_user[values.LDAP.DN];
+
+        if (values.LDAP.STAFF_OUs.some(text => dn.includes(text))) {
+            new_user[values.JD.UI_GROUP] = values.JD.STAFF_GROUP;
+        } else if (values.LDAP.TTA_OUs.some(text => dn.includes(text))) {
+            new_user[values.JD.UI_GROUP] = values.JD.TTA_GROUP;
+        } else if (values.LDAP.FACULTY_OUs.some(text => dn.includes(text))) {
+            new_user[values.JD.UI_GROUP] = values.JD.FACULTY_GROUP;
+        } else if (values.LDAP.EXCHANGE_STUDENT_OUs.some(text => dn.includes(text))) {
+            new_user[values.JD.UI_GROUP] = values.JD.EXCHANGE_STUDENT_GROUP;
+        } else if (values.LDAP.STUDENT_OUs.some(text => dn.includes(text))) {
+            new_user[values.JD.UI_GROUP] = values.JD.STUDENT_GROUP;
+        } else {
+            new_user[values.JD.UI_GROUP] = values.JD.OTHERS_GROUP;
         }
 
         // admin edit access to all profiles can be implemented here. Need to remove loggedin user id mismatch check
@@ -42,7 +58,7 @@ class JDService {
         searchType = searchType.toUpperCase();
 
         if (searchType == values.JD.NAME) {
-            filter = `${values.LDAP.DISPLAY_NAME}=${searchValue}*`
+            filter = `${values.LDAP.DISPLAY_NAME}=*${searchValue}*`
         } else if (searchType == values.JD.REG_NO) {
             filter = `${values.LDAP.REG_NO}=*${searchValue}*`
         } else if (searchType == values.JD.EMAIL) {
@@ -54,15 +70,15 @@ class JDService {
         } else if (searchType == values.JD.ROOM_NO) {
             filter = `${values.LDAP.ROOM_NO}=*${searchValue}*`
         } else if (searchType == values.JD.HOSTEL) {
-            filter = `${values.LDAP.HOSTEL}=${searchValue}*`
+            filter = `${values.LDAP.HOSTEL}=*${searchValue}*`
         } else if (searchType == values.JD.COMPANY) {
-            filter = `${values.LDAP.COMPANY}=${searchValue}*`
+            filter = `${values.LDAP.COMPANY}=*${searchValue}*`
         } else if (searchType == values.JD.BATCH) {
             filter = `${values.LDAP.BATCH}=${searchValue}*`
         } else if (searchType == values.JD.OFFICE_CITY) {
-            filter = `${values.LDAP.OFFICE_CITY}=${searchValue}*`
+            filter = `${values.LDAP.OFFICE_CITY}=*${searchValue}*`
         } else if (searchType == values.JD.HOME_CITY) {
-            filter = `${values.LDAP.HOME_CITY}=${searchValue}*`
+            filter = `${values.LDAP.HOME_CITY}=*${searchValue}*`
         } else if (searchType == values.JD.CN) {
             filter = `${values.LDAP.CN}=${searchValue}`
         } else {
@@ -104,7 +120,7 @@ class JDService {
             console.log(`Profile was updated for ${dn} on LDAP`)
         } catch (err) {
             if (!err.message) err.message = values.ERROR.PASSWORD_RESET_NOT_DONE
-            console.log(`Profile data was not updated for ${dn}. Message: ${err.message}`)
+            console.log(`Profile data was not updated for ${loggedInUserId}. Message: ${err.message}`)
             throw new Error(err.message)
         }
     }

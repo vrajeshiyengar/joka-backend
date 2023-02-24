@@ -93,6 +93,7 @@ class LdapDataService {
       scope: "sub",
       filter,
       attributes,
+      // sizeLimit: 502
     };
     const results = [];
 
