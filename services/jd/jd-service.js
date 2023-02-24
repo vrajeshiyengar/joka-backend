@@ -58,7 +58,7 @@ class JDService {
         searchType = searchType.toUpperCase();
 
         if (searchType == values.JD.NAME) {
-            filter = `${values.LDAP.DISPLAY_NAME}=${searchValue}*`
+            filter = `${values.LDAP.DISPLAY_NAME}=*${searchValue}*`
         } else if (searchType == values.JD.REG_NO) {
             filter = `${values.LDAP.REG_NO}=*${searchValue}*`
         } else if (searchType == values.JD.EMAIL) {
@@ -70,15 +70,15 @@ class JDService {
         } else if (searchType == values.JD.ROOM_NO) {
             filter = `${values.LDAP.ROOM_NO}=*${searchValue}*`
         } else if (searchType == values.JD.HOSTEL) {
-            filter = `${values.LDAP.HOSTEL}=${searchValue}*`
+            filter = `${values.LDAP.HOSTEL}=*${searchValue}*`
         } else if (searchType == values.JD.COMPANY) {
-            filter = `${values.LDAP.COMPANY}=${searchValue}*`
+            filter = `${values.LDAP.COMPANY}=*${searchValue}*`
         } else if (searchType == values.JD.BATCH) {
             filter = `${values.LDAP.BATCH}=${searchValue}*`
         } else if (searchType == values.JD.OFFICE_CITY) {
-            filter = `${values.LDAP.OFFICE_CITY}=${searchValue}*`
+            filter = `${values.LDAP.OFFICE_CITY}=*${searchValue}*`
         } else if (searchType == values.JD.HOME_CITY) {
-            filter = `${values.LDAP.HOME_CITY}=${searchValue}*`
+            filter = `${values.LDAP.HOME_CITY}=*${searchValue}*`
         } else if (searchType == values.JD.CN) {
             filter = `${values.LDAP.CN}=${searchValue}`
         } else {
