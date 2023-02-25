@@ -29,6 +29,7 @@ module.exports = {
             console.error("Token expired");
             return reject();
           }
+          /* 
           const expiryTimeObj = new Date(result.expiry);
           const currentTimeObj = new Date(utils.getTimeStamps());
           const ttl_in_seconds = (expiryTimeObj.getTime() - currentTimeObj.getTime()) / 1000;
@@ -73,7 +74,7 @@ module.exports = {
             });
           } else {
             return resolve(result);
-          }
+          } */
         });
       } catch (err) {
         console.error("Last catch", err);
