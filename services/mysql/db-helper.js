@@ -7,14 +7,14 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const now = utils.getTimeStamps();
       var sql = `DELETE FROM AccessToken WHERE expiry <= "${now}"`;
+      console.log("In refresh tokens, running query: ", sql);
       connection.query(sql, (err, result) => {
-        console.log("in refreshAccessTokens");
         if (err) {
           console.error("Got error", err);
           return reject(err);
         }
-        console.log(result);
-        if (result && result.affectedRows)
+        // console.log(result);
+        if (result)
           console.log(`*****************${result.affectedRows} records were deleted from AccessToken table`);
         return resolve();
       });
