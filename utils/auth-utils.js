@@ -17,6 +17,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       try {
         dbHelper.getByAccessToken(connection, token, (result) => {
+          console.log(result);
           if (!result) {
             console.error("Error with result");
             return reject();
