@@ -56,6 +56,7 @@ module.exports = {
   },
   //add full name here
   insertAccessToken: (connection, dataObj, callback) => {
+    console.log("59 Inside insert token")
     var sql = `INSERT INTO AccessToken (access_token, user_id, email, fullname, created, expiry) VALUES ("${dataObj.access_token}", "${dataObj.user_id}", "${dataObj.email}", "${dataObj.fullname}", "${dataObj.created}", "${dataObj.expiry}")`;
     connection.query(sql, function (err, result) {
       if (err) throw err;
@@ -64,6 +65,7 @@ module.exports = {
   },
   deleteAccessToken: (connection, access_token) => {
     return new Promise((resolve, reject) => {
+      console.log("68 Inside delete token")
       var sql = `DELETE FROM AccessToken WHERE access_token = '${access_token}'`;
       connection.query(sql, function (err, result) {
         if (err) return reject(err);
