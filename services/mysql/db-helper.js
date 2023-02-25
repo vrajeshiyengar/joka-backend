@@ -10,7 +10,7 @@ module.exports = {
       connection.query(sql, (err, result) => {
         console.log("in refreshAccessTokens");
         if (err) {
-          console.error(err);
+          console.error("Got error", err);
           return reject(err);
         }
         console.log(result);
