@@ -29,6 +29,8 @@ module.exports = {
             console.error("Token expired");
             return reject();
           }
+
+          return resolve(result);
           /* 
           const expiryTimeObj = new Date(result.expiry);
           const currentTimeObj = new Date(utils.getTimeStamps());
