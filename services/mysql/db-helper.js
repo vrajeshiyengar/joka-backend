@@ -1,5 +1,6 @@
 const values = require("../../constants/values");
 const utils = require("../../utils/utils");
+const connection = require("./mysql-connection");
 
 module.exports = {
   refreshAccessTokens: (connection) => {
@@ -14,8 +15,25 @@ module.exports = {
         }
         console.log(result);
         if (result && result.affectedRows)
-          console.log(`${result.affectedRows} records were deleted from AccessToken table`);
+          console.log(`*****************${result.affectedRows} records were deleted from AccessToken table`);
         return resolve();
+      });
+    });
+  },
+  getAllAccessTokens: async (connection) => {
+    return new Promise((resolve, reject) => {
+      console.log("in getAllAccessTokens");
+      var sql = `SELECT * FROM AccessToken`;
+      connection.query(sql, (err, results) => {
+        if (err) {
+          console.error("29", err);
+          return reject(err);
+        }
+        if (Array.isArray(results) && results.length > 0) {
+          let result = results[0];
+          return resolve(result["dn"]);
+        }
+        reject(new Error(values.ERROR.INVALID_TOKEN));
       });
     });
   },
@@ -27,11 +45,12 @@ module.exports = {
         throw err;
       }
       console.log("In dbHelper", result);
-      if (Array.isArray(result)) {
+      if (Array.isArray(result) && result.length == 1) {
         result = result[0];
         callback(result);
       } else {
-        console.error("SQL result was not an array");
+        console.error("Access token not found in db");
+        return undefined;
       }
     });
   },

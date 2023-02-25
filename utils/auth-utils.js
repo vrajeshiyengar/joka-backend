@@ -14,8 +14,10 @@ module.exports = {
       console.error(err);
       return reject();
     }
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
+        await dbHelper.getAllAccessTokens(connection);
+        console.log("20 auth-utils.js");
         dbHelper.getByAccessToken(connection, token, (result) => {
           console.log(result);
           if (!result) {
