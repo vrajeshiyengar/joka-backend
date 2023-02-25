@@ -30,7 +30,7 @@ module.exports = {
           return reject(err);
         }
         if (Array.isArray(results) && results.length > 0) {
-          console.log(results.length);
+          console.log(results);
         }
         reject(new Error(values.ERROR.INVALID_TOKEN));
       });
