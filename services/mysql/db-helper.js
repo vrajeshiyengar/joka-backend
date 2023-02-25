@@ -39,12 +39,13 @@ module.exports = {
   },
   getByAccessToken: (connection, access_token = "access", callback) => {
     var sql = `SELECT * FROM AccessToken WHERE access_token = '${access_token}'`;
+    console.log("In getByAccessToken, query: ", sql);
     connection.query(sql, function (err, result) {
       if (err) {
         console.error(err);
         throw err;
       }
-      console.log("In dbHelper", result);
+      console.log("In getByAccessToken, result: ", result);
       if (Array.isArray(result) && result.length == 1) {
         result = result[0];
         callback(result);
