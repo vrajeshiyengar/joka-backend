@@ -16,7 +16,7 @@ Router.use(async (req, res, next) => {
   res.setHeader(values.SECURITY.ACCESS_CONTROL_EXPOSE_HEADERS, values.SECURITY.AUTH_TOKEN);
 
   // Skipping token validation for auth urls
-  if (req.url.startsWith("/auth") || req.url.startsWith("/jd")) return next();
+  if (req.url.startsWith("/auth")) return next();
 
   const joka_auth_token = req.get(values.SECURITY.AUTH_TOKEN);
 
