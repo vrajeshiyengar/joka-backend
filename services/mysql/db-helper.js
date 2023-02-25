@@ -8,7 +8,8 @@ module.exports = {
       var sql = `DELETE FROM AccessToken WHERE expiry <= "${now}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken table`)
+        if (result && result.affectedRows)
+          console.log(`${result.affectedRows} records were deleted from AccessToken table`);
         resolve();
       });
     });
@@ -39,9 +40,16 @@ module.exports = {
   getByAccessToken: (connection, access_token = "access", callback) => {
     var sql = `SELECT * FROM AccessToken WHERE access_token = '${access_token}'`;
     connection.query(sql, function (err, result) {
-      if (err) throw err;
-      if (Array.isArray(result)) result = result[0];
-      callback(result);
+      if (err) {
+        console.error(err);
+        throw err;
+      }
+      if (Array.isArray(result)) {
+        result = result[0];
+        callback(result);
+      } else {
+        console.error("SQL result was not an array");
+      }
     });
   },
   /* getAccessTokenByUserId: (connection, user_id = "user", callback) => {
@@ -75,7 +83,8 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE expiry <= "${now}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from ResetPasswordToken table`)
+        if (result && result.affectedRows)
+          console.log(`${result.affectedRows} records were deleted from ResetPasswordToken table`);
         resolve();
       });
     });
@@ -107,9 +116,10 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE reset_password_token = "${reset_password_token}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${reset_password_token} was deleted from ResetPasswordToken table`)
+        if (result && result.affectedRows)
+          console.log(`${reset_password_token} was deleted from ResetPasswordToken table`);
         resolve();
       });
     });
-  }
+  },
 };
