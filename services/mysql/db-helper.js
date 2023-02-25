@@ -51,7 +51,7 @@ module.exports = {
         callback(result);
       } else {
         console.error("Access token not found in db");
-        return undefined;
+        callback(undefined);
       }
     });
   },
