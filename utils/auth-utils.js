@@ -38,7 +38,15 @@ module.exports = {
             ? parseFloat(process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS) * 60
             : 60;
 
+          console.log("Checking if token is close to expiry");
+          console.log(
+            ttl_in_seconds,
+            renewal_threshold_in_seconds,
+            process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS,
+            parseFloat(process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS) * 60
+          );
           if (ttl_in_seconds <= renewal_threshold_in_seconds) {
+            console.log("Close to expiry");
             const ts = utils.getTimeStamps(
               true,
               1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS)
@@ -54,10 +62,12 @@ module.exports = {
             };
             dbHelper.insertAccessToken(connection, dataObj, async (res) => {
               try {
+                console.log("inserted new token", dataObj.access_token);
                 await dbHelper.deleteAccessToken(connection, result.access_token);
               } catch (err) {
-                console.error("error with deleting old token", err);
+                console.error("error with deleting old token");
                 console.error(err);
+                return reject(err);
               }
               return resolve(res);
             });
