@@ -7,6 +7,7 @@ const utils = require("../utils/utils");
 // checking for joka-auth-token in headers
 Router.use(async (req, res, next) => {
   console.info("\nURL hit:", req.originalUrl);
+  console.info("Joka Auth Token:", req.get(values.SECURITY.AUTH_TOKEN));
   console.info("Request Method", req.method);
   console.info("Request Params", req.query);
   console.info("Request Data", req.body);
