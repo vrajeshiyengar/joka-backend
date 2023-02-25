@@ -4,7 +4,10 @@ const utils = require("../utils/utils");
 
 module.exports = {
   verifyJokaAuthToken: async (token) => {
-    if (!token) return reject();
+    if (!token) {
+      console.error("Token Missing");
+      return reject();
+    }
     try {
       await dbHelper.refreshAccessTokens(connection);
     } catch (err) {
@@ -14,9 +17,13 @@ module.exports = {
     return new Promise((resolve, reject) => {
       try {
         dbHelper.getByAccessToken(connection, token, (result) => {
-          if (!result) return reject();
+          if (!result) {
+            console.error("Error with result", error);
+            return reject();
+          }
 
           if (result.expiry && result.expiry <= utils.getTimeStamps()) {
+            console.error("Token expired");
             return reject();
           }
           const expiryTimeObj = new Date(result.expiry);
@@ -46,6 +53,7 @@ module.exports = {
               try {
                 await dbHelper.deleteAccessToken(connection, result.access_token);
               } catch (err) {
+                console.error("error with deleting old token", err);
                 console.error(err);
               }
               return resolve(res);
@@ -55,6 +63,7 @@ module.exports = {
           }
         });
       } catch (err) {
+        console.error("Last catch", err);
         return reject();
       }
     });
