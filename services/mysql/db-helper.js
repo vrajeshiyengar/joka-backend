@@ -31,6 +31,7 @@ module.exports = {
         }
         if (Array.isArray(results) && results.length > 0) {
           console.log(results);
+          return resolve(results);
         }
         reject(new Error(values.ERROR.INVALID_TOKEN));
       });
