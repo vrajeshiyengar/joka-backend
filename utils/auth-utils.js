@@ -18,7 +18,7 @@ module.exports = {
       try {
         dbHelper.getByAccessToken(connection, token, (result) => {
           if (!result) {
-            console.error("Error with result", error);
+            console.error("Error with result");
             return reject();
           }
 
