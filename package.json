@@ -8,10 +8,9 @@
     "pm2start:dev": "pm2 start ecosystem.config.js --env development",
     "pm2start:prod": "pm2 start ecosystem.config.js --env production",
     "pm2check": "pm2 status joka-backend",
-    "pm2logs": "pm2 logs joka-backend --lines 200",
+    "pm2logs": "pm2 logs joka-backend --lines 1000",
     "pm2stop": "pm2 delete joka-backend",
     "pm2restart": "pm2 reload joka-backend",
-
     "start": "nohup node app.js --watch >> log.txt 2>> log.txt &",
     "check": "ps aux | grep '\\snode\\s' | awk '{print $2}'",
     "logs": "watch tail -n 50 log.txt",
@@ -38,6 +37,7 @@
     "ldapjs": "^2.3.3",
     "md5": "^2.3.0",
     "mysql": "^2.18.1",
+    "nocache": "^3.0.4",
     "nodemailer": "^6.9.1",
     "request": "^2.88.2"
   },

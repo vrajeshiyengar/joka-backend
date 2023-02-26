@@ -1,59 +1,63 @@
 const values = require("../../constants/values");
 const utils = require("../../utils/utils");
+const connection = require("./mysql-connection");
 
 module.exports = {
   refreshAccessTokens: (connection) => {
     return new Promise((resolve, reject) => {
       const now = utils.getTimeStamps();
       var sql = `DELETE FROM AccessToken WHERE expiry <= "${now}"`;
+      console.log("In refresh tokens, running query: ", sql);
       connection.query(sql, (err, result) => {
-        if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken table`)
-        resolve();
+        if (err) {
+          console.error("Got error", err);
+          return reject(err);
+        }
+        // console.log(result);
+        if (result)
+          console.log(`*****************${result.affectedRows} records were deleted from AccessToken table`);
+        return resolve();
       });
     });
-    /* var sql = `SELECT * FROM AccessToken`;
-    connection.query(sql, function (err, result) {
-      if (err) throw err;
-      if (result.length) {
-        const now = utils.getTimeStamps();
-        result.forEach((x) => {
-          if (x.expiry <= now) {
-            const deleteSql = `DELETE FROM AccessToken WHERE access_token = '${x.access_token}'`;
-            connection.query(deleteSql, function (err, result) {
-              if (err) throw err;
-              if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from AccessToken table`)
-            });
-          }
-        });
-      }
-    }); */
   },
-  /* getAccessTokens: (connection, callback) => {
-    var sql = `SELECT * FROM AccessToken`;
-    connection.query(sql, function (err, result) {
-      if (err) throw err;
-      callback(result);
+  getAllAccessTokens: async (connection) => {
+    return new Promise((resolve, reject) => {
+      console.log("in getAllAccessTokens");
+      var sql = `SELECT * FROM AccessToken`;
+      connection.query(sql, (err, results) => {
+        if (err) {
+          console.error("29", err);
+          return reject(err);
+        }
+        if (Array.isArray(results) && results.length > 0) {
+          console.log(results.length);
+          return resolve(results);
+        }
+        reject(new Error(values.ERROR.INVALID_TOKEN));
+      });
     });
-  }, */
+  },
   getByAccessToken: (connection, access_token = "access", callback) => {
     var sql = `SELECT * FROM AccessToken WHERE access_token = '${access_token}'`;
+    console.log("In getByAccessToken, query: ", sql);
     connection.query(sql, function (err, result) {
-      if (err) throw err;
-      if (Array.isArray(result)) result = result[0];
-      callback(result);
+      if (err) {
+        console.error(err);
+        throw err;
+      }
+      console.log("In getByAccessToken, result: ", result);
+      if (Array.isArray(result) && result.length == 1) {
+        result = result[0];
+        callback(result);
+      } else {
+        console.error("Access token not found in db");
+        callback(undefined);
+      }
     });
   },
-  /* getAccessTokenByUserId: (connection, user_id = "user", callback) => {
-    var sql = `SELECT * FROM AccessToken WHERE user_id = '${user_id}'`;
-    connection.query(sql, function (err, result) {
-      if (err) throw err;
-      if (Array.isArray(result)) result = result[0];
-      callback(result);
-    });
-  }, */
   //add full name here
   insertAccessToken: (connection, dataObj, callback) => {
+    console.log("59 Inside insert token")
     var sql = `INSERT INTO AccessToken (access_token, user_id, email, fullname, created, expiry) VALUES ("${dataObj.access_token}", "${dataObj.user_id}", "${dataObj.email}", "${dataObj.fullname}", "${dataObj.created}", "${dataObj.expiry}")`;
     connection.query(sql, function (err, result) {
       if (err) throw err;
@@ -62,6 +66,7 @@ module.exports = {
   },
   deleteAccessToken: (connection, access_token) => {
     return new Promise((resolve, reject) => {
+      console.log("68 Inside delete token")
       var sql = `DELETE FROM AccessToken WHERE access_token = '${access_token}'`;
       connection.query(sql, function (err, result) {
         if (err) return reject(err);
@@ -75,7 +80,8 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE expiry <= "${now}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${result.affectedRows} records were deleted from ResetPasswordToken table`)
+        if (result && result.affectedRows)
+          console.log(`${result.affectedRows} records were deleted from ResetPasswordToken table`);
         resolve();
       });
     });
@@ -107,9 +113,10 @@ module.exports = {
       var sql = `DELETE FROM ResetPasswordToken WHERE reset_password_token = "${reset_password_token}"`;
       connection.query(sql, (err, result) => {
         if (err) return reject(err);
-        if (result && result.affectedRows) console.log(`${reset_password_token} was deleted from ResetPasswordToken table`)
+        if (result && result.affectedRows)
+          console.log(`${reset_password_token} was deleted from ResetPasswordToken table`);
         resolve();
       });
     });
-  }
+  },
 };

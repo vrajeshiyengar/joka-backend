@@ -13,6 +13,7 @@ router.get("/users", async (req, res) => {
         const searchValue = req.query.searchValue;
         const searchType = req.query.searchType;
         const users = await jdService.searchUsers(searchValue, searchType, loggedInUserId);
+        console.log(`Returning ${users.length} records for searchValue:${searchValue}, searchType${searchType}`);
         res.status(200).json(users);
     } catch (err) {
         console.error(err);

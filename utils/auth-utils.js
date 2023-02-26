@@ -4,21 +4,34 @@ const utils = require("../utils/utils");
 
 module.exports = {
   verifyJokaAuthToken: async (token) => {
-    if (!token) return reject();
+    if (!token) {
+      console.error("Token Missing");
+      return reject();
+    }
     try {
       await dbHelper.refreshAccessTokens(connection);
     } catch (err) {
       console.error(err);
       return reject();
     }
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
+        await dbHelper.getAllAccessTokens(connection);
+        console.log("20 auth-utils.js");
         dbHelper.getByAccessToken(connection, token, (result) => {
-          if (!result) return reject();
-
-          if (result.expiry && result.expiry <= utils.getTimeStamps()) {
+          // console.log(result);
+          if (!result) {
+            console.error("Error with result");
             return reject();
           }
+
+          if (result.expiry && result.expiry <= utils.getTimeStamps()) {
+            console.error("Token expired");
+            return reject();
+          }
+
+          return resolve(result);
+          /* 
           const expiryTimeObj = new Date(result.expiry);
           const currentTimeObj = new Date(utils.getTimeStamps());
           const ttl_in_seconds = (expiryTimeObj.getTime() - currentTimeObj.getTime()) / 1000;
@@ -28,7 +41,15 @@ module.exports = {
             ? parseFloat(process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS) * 60
             : 60;
 
+          console.log("Checking if token is close to expiry");
+          console.log(
+            ttl_in_seconds,
+            renewal_threshold_in_seconds,
+            process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS,
+            parseFloat(process.env.AUTH_TOKEN_RENEWAL_THRESHOLD_IN_MINS) * 60
+          );
           if (ttl_in_seconds <= renewal_threshold_in_seconds) {
+            console.log("Close to expiry");
             const ts = utils.getTimeStamps(
               true,
               1000 * 60 * parseFloat(process.env.AUTH_TOKEN_LIFTEIME_IN_MINS)
@@ -44,17 +65,21 @@ module.exports = {
             };
             dbHelper.insertAccessToken(connection, dataObj, async (res) => {
               try {
+                console.log("inserted new token", dataObj.access_token);
                 await dbHelper.deleteAccessToken(connection, result.access_token);
               } catch (err) {
+                console.error("error with deleting old token");
                 console.error(err);
+                return reject(err);
               }
               return resolve(res);
             });
           } else {
             return resolve(result);
-          }
+          } */
         });
       } catch (err) {
+        console.error("Last catch", err);
         return reject();
       }
     });
