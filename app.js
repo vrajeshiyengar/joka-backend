@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const cors = require("cors")
 const utils = require("./utils/utils")
+const nocache = require("nocache");
 
 app.use(bodyParser.json());
 app.use(
@@ -16,6 +17,9 @@ app.use(
 );
 
 if (!utils.isProdMode()) app.use(cors())
+
+app.use(nocache());
+app.set("etag", false);
 
 app.use("/api", routes);
 

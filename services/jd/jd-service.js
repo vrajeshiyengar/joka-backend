@@ -79,6 +79,14 @@ class JDService {
             filter = `${values.LDAP.OFFICE_CITY}=*${searchValue}*`
         } else if (searchType == values.JD.HOME_CITY) {
             filter = `${values.LDAP.HOME_CITY}=*${searchValue}*`
+        } else if (searchType == values.JD.SUMMERS_COMPANY) {
+            filter = `${values.LDAP.SUMMERS_COMPANY}=*${searchValue}*`
+        } else if (searchType == values.JD.FINALS_COMPANY) {
+            filter = `${values.LDAP.FINALS_COMPANY}=*${searchValue}*`
+        } else if (searchType == values.JD.UG_DEGREE) {
+            filter = `${values.LDAP.UG_DEGREE}=*${searchValue}*`
+        } else if (searchType == values.JD.UG_COLLEGE) {
+            filter = `${values.LDAP.UG_COLLEGE}=*${searchValue}*`
         } else if (searchType == values.JD.CN) {
             filter = `${values.LDAP.CN}=${searchValue}`
         } else {
