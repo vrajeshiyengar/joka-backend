@@ -6,7 +6,9 @@
 
 const ldapDataService = require('../ldap/ldap-data-service/ldap-data-service')
 const ldapUtils = require('../../utils/ldap-utils')
-const values = require('../../constants/values')
+const values = require('../../constants/values');
+const fileStorageUtils = require('../../utils/file-storage-utils');
+const paths = require('../../constants/paths');
 
 class JDService {
 
@@ -131,6 +133,16 @@ class JDService {
             console.log(`Profile data was not updated for ${loggedInUserId}. Message: ${err.message}`)
             throw new Error(err.message)
         }
+    }
+
+    async saveUserImage(userData, loggedInUserId) {
+        if (!(loggedInUserId == userData["cn"])) throw new Error(values.ERROR.USER_ID_MISMATCH);
+
+        if (!(userData[values.JD.EDIT_PROFILE_ACCESS])) throw new Error(values.ERROR.EDIT_PROFILE_ACCESS_MISSING);
+
+        const imageWritePath = `${paths.USER_IMAGES_DIRECTORY_PATH}/${loggedInUserId}.jpg`;
+
+        return fileStorageUtils.write(imageWritePath, userData[values.JD.IMAGE_DATA]);
     }
 }
 

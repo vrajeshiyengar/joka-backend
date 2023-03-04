@@ -42,4 +42,16 @@ router.post("/updateUser", async (req, res) => {
     }
 })
 
+router.post("/saveUserImage", async (req, res) => {
+    let loggedInUserId = res.get(values.SECURITY.USER_ID);
+    try {
+        const userData = req.body;
+        await jdService.saveUserImage(userData, loggedInUserId);
+        res.status(200);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
 module.exports = router;

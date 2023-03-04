@@ -84,7 +84,8 @@ module.exports = {
         FACULTY_GROUP: "Faculty",
         STAFF_GROUP: "Staff",
         TTA_GROUP: "TTA",
-        OTHERS_GROUP: "Others"
+        OTHERS_GROUP: "Others",
+        IMAGE_DATA: "IMAGE",
     },
     SECURITY: {
         AUTH_TOKEN: "joka_auth_token", //header keys need to be in lower case
