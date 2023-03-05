@@ -2,6 +2,8 @@ const express = require("express");
 const values = require("../constants/values");
 const jdService = require('../services/jd/jd-service');
 const authUtils = require('../utils/auth-utils')
+var multer  = require('multer');
+var upload = multer(/* { dest: './uploads/'} */);
 
 const router = express.Router();
 
@@ -42,8 +44,8 @@ router.post("/updateUser", async (req, res) => {
     }
 })
 
-router.post("/saveUserImage", async (req, res) => {
-    console.log(res);
+router.post("/saveUserImage", upload.single('IMAGE'), async (req, res) => {
+    console.log(req);
     let loggedInUserId = res.get(values.SECURITY.USER_ID);
     try {
         const userData = req.body;

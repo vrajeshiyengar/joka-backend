@@ -8,8 +8,8 @@ const port = process.env.PORT || 3000;
 const cors = require("cors")
 const utils = require("./utils/utils")
 const nocache = require("nocache");
-var multer = require('multer');
-var upload = multer();
+// var multer = require('multer');
+// var upload = multer();
 
 app.use(bodyParser.json());
 app.use(
@@ -17,7 +17,7 @@ app.use(
     extended: false,
   })
 );
-app.use(upload.array()); 
+// app.use(upload.array()); 
 
 if (!utils.isProdMode()) app.use(cors())
 
