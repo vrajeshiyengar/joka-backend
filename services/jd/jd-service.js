@@ -9,6 +9,7 @@ const ldapUtils = require("../../utils/ldap-utils");
 const values = require("../../constants/values");
 const fileStorageUtils = require("../../utils/file-storage-utils");
 const paths = require("../../constants/paths");
+const jdConfig = require("../../config/jd-config");
 
 class JDService {
   modifyUserObjectForJD(user, loggedInUserId) {
@@ -152,6 +153,13 @@ class JDService {
     if (!(loggedInUserId == userData["cn"])) throw new Error(values.ERROR.USER_ID_MISMATCH);
 
     if (!imageFile || !imageFile.buffer) throw new Error(values.ERROR.IMAGE_DATA_MISSING);
+
+    if (imageFile.mimetype !== "image/jpeg" && imageFile.mimetype !== "image/png")
+      throw new Error(values.ERROR.INVALID_IMAGE_FORMAT);
+
+    if (imageFile.size > jdConfig.MAX_JD_USER_IMAGE_SIZE_IN_BYTES)
+      throw new Error(values.ERROR.INVALID_IMAGE_SIZE);
+
     const imageData = imageFile.buffer;
 
     const imageWritePath = `${paths.USER_IMAGES_DIRECTORY_PATH}/${loggedInUserId}.jpg`;
