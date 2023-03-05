@@ -102,6 +102,7 @@ module.exports = {
     TTA_GROUP: "TTA",
     OTHERS_GROUP: "Others",
     IMAGE_DATA: "IMAGE",
+    IMAGE_PATH: "imagePath",
   },
   SECURITY: {
     AUTH_TOKEN: "joka_auth_token", //header keys need to be in lower case
