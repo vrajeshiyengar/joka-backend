@@ -161,8 +161,7 @@ class JDService {
       throw new Error(values.ERROR.INVALID_IMAGE_SIZE);
 
     const imageData = imageFile.buffer;
-
-    const imageWritePath = `${paths.USER_IMAGES_DIRECTORY_PATH}/${loggedInUserId}.jpg`;
+    const imageWritePath = `${paths.USER_IMAGES_DIRECTORY_PATH}/${loggedInUserId}.${jdConfig.DEFAULT_USER_IMAGE_FILE_EXTENSION}`;
 
     return fileStorageUtils.write(imageWritePath, imageData);
   }
