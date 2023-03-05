@@ -46,10 +46,10 @@ router.post("/updateUser", async (req, res) => {
   }
 });
 
-router.post("/saveUserImage", multer().none(), (req, res) => {
+router.post("/saveUserImage", multer().single("IMAGE"), async (req, res) => {
   console.log(req);
   const loggedInUserId = res.get(values.SECURITY.USER_ID);
-  const userData = req.body;
+  /*  const userData = req.body;
 
   if (!userData["cn"]) return res.status(500).send(values.ERROR.USER_NOT_FOUND);
 
@@ -69,17 +69,17 @@ router.post("/saveUserImage", multer().none(), (req, res) => {
       return res.status(500).send("Something went wrong!");
     }
     res.status(200).send("OK");
-  });
+  }); */
 
-  /* try {
+  try {
     const userData = req.body;
     const imageData = req.file;
     await jdService.saveUserImage(userData, imageData, loggedInUserId);
-    res.status(200);
+    res.status(200).send("OK");
   } catch (err) {
     console.error(err.message);
     res.status(500).send(err.message);
-  } */
+  }
 });
 
 module.exports = router;
