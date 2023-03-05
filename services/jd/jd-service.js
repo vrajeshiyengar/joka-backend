@@ -136,6 +136,8 @@ class JDService {
     }
 
     async saveUserImage(userData, loggedInUserId) {
+        if (!userData["cn"]) throw new Error(values.ERROR.USER_NOT_FOUND);
+
         if (!(loggedInUserId == userData["cn"])) throw new Error(values.ERROR.USER_ID_MISMATCH);
 
         if (!(userData[values.JD.EDIT_PROFILE_ACCESS])) throw new Error(values.ERROR.EDIT_PROFILE_ACCESS_MISSING);
