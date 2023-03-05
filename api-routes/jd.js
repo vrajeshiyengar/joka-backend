@@ -2,7 +2,7 @@ const express = require("express");
 const values = require("../constants/values");
 const jdService = require("../services/jd/jd-service");
 const authUtils = require("../utils/auth-utils");
-const paths = require("../../constants/paths");
+const paths = require("../constants/paths");
 const multer = require("multer");
 
 const router = express.Router();
