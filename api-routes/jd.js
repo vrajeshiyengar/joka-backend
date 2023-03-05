@@ -47,7 +47,7 @@ router.post("/updateUser", async (req, res) => {
 });
 
 router.post("/saveUserImage", (req, res) => {
-  console.log(req);
+//   console.log(req);
   let loggedInUserId = res.get(values.SECURITY.USER_ID);
 
   var storage = multer.diskStorage({
@@ -60,7 +60,7 @@ router.post("/saveUserImage", (req, res) => {
 
   upload(req, res, (err) => {
     if (err) {
-      res.status(400).send("Something went wrong!");
+      res.status(500).send("Something went wrong!");
     }
     res.status(200);
   });
