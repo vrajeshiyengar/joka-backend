@@ -13,7 +13,8 @@ module.exports = {
         PROFILE_NOT_UPDATED: "Profile was not updated",
         INVALID_PASSWORD: "You have provided an invalid password",
         TOKEN_MISSING: "Token Missing",
-        SERVER_ERROR_FOR_TOKEN: "Server error while validating token"
+        SERVER_ERROR_FOR_TOKEN: "Server error while validating token",
+        IMAGE_DATA_MISSING: "Image data is missing",
     },
     INFO: {
         PASSWORD_RESET_DONE: "Your Password has been updated",

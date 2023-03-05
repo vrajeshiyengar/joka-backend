@@ -140,7 +140,7 @@ class JDService {
 
         if (!(loggedInUserId == userData["cn"])) throw new Error(values.ERROR.USER_ID_MISMATCH);
 
-        if (!(userData[values.JD.EDIT_PROFILE_ACCESS])) throw new Error(values.ERROR.EDIT_PROFILE_ACCESS_MISSING);
+        if (!(userData[values.JD.IMAGE_DATA])) throw new Error(values.ERROR.IMAGE_DATA_MISSING);
 
         const imageWritePath = `${paths.USER_IMAGES_DIRECTORY_PATH}/${loggedInUserId}.jpg`;
 
