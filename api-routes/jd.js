@@ -73,10 +73,8 @@ router.post("/saveUserImage", multer().single("IMAGE"), async (req, res) => {
   try {
     const userData = req.body;
     const imageFile = req.file;
-    console.log(userData);
-    console.log(imageFile);
     await jdService.saveUserImage(userData, imageFile, loggedInUserId);
-    res.status(200).send("OK");
+    res.status(200).send(values.INFO.IMAGE_DATA_UPDATED);
   } catch (err) {
     console.error(err.message);
     res.status(500).send(err.message);

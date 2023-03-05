@@ -26,6 +26,7 @@ module.exports = {
     LOG_IN_SUCCESS: "User has been logged in",
     EXISTING_LOG_IN: "User is already logged in",
     VALID_TOKEN: "Valid Token",
+    IMAGE_DATA_UPDATED: "Image data has been updated",
   },
   LDAP: {
     SN: "sn",
