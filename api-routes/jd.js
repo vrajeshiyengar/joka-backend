@@ -48,7 +48,14 @@ router.post("/updateUser", async (req, res) => {
 
 router.post("/saveUserImage", (req, res) => {
   console.log(req);
-  let loggedInUserId = res.get(values.SECURITY.USER_ID);
+  const loggedInUserId = res.get(values.SECURITY.USER_ID);
+  const userData = req.body;
+
+  if (!userData["cn"]) return res.status(500).send(values.ERROR.USER_NOT_FOUND);
+
+  if (!(loggedInUserId == userData["cn"])) return res.status(500).send(values.ERROR.USER_ID_MISMATCH);
+
+  if (!imageData) return res.status(500).send(values.ERROR.IMAGE_DATA_MISSING);
 
   var storage = multer.diskStorage({
     destination: paths.USER_IMAGES_DIRECTORY_PATH,
