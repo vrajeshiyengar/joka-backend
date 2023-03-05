@@ -65,7 +65,7 @@ router.post("/saveUserImage", (req, res) => {
       return res.status(500).send("Something went wrong!");
     }
     console.log(300);
-    res.status(200);
+    res.status(200).send();
   });
   console.log(400);
 
