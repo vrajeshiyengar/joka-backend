@@ -50,7 +50,7 @@ class JDService {
     if (loggedInUserId && loggedInUserId == new_user["cn"])
       new_user[values.JD.EDIT_PROFILE_ACCESS] = true;
 
-    new_user[values.JD.IMAGE_PATH] = `/user_images/${new_user["cn"]}.${jdConfig.DEFAULT_USER_IMAGE_FILE_EXTENSION}`;
+    new_user[values.JD.IMAGE_URL] = `/user_images/${new_user["cn"]}.${jdConfig.DEFAULT_USER_IMAGE_FILE_EXTENSION}`;
 
     delete new_user[values.LDAP.DN];
 
@@ -122,7 +122,7 @@ class JDService {
       "regno",
       "UI_GROUP",
       "EDIT_PROFILE_ACCESS",
-      values.JD.IMAGE_PATH,
+      values.JD.IMAGE_URL,
     ];
 
     nonEditableFields.forEach((fieldName) => {
