@@ -46,7 +46,7 @@ router.post("/updateUser", async (req, res) => {
   }
 });
 
-router.post("/saveUserImage", (req, res) => {
+router.post("/saveUserImage", multer().none(), (req, res) => {
   console.log(req);
   const loggedInUserId = res.get(values.SECURITY.USER_ID);
   const userData = req.body;
