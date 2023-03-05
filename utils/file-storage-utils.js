@@ -2,6 +2,7 @@
  * @created on 04.03.2023
  * @purpose to write files on server
  */
+const fs = require("fs");
 
 module.exports = {
   write: (path, data) => {
