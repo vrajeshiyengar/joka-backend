@@ -135,16 +135,16 @@ class JDService {
         }
     }
 
-    async saveUserImage(userData, loggedInUserId) {
+    async saveUserImage(userData, imageData, loggedInUserId) {
         if (!userData["cn"]) throw new Error(values.ERROR.USER_NOT_FOUND);
 
         if (!(loggedInUserId == userData["cn"])) throw new Error(values.ERROR.USER_ID_MISMATCH);
 
-        if (!(userData[values.JD.IMAGE_DATA])) throw new Error(values.ERROR.IMAGE_DATA_MISSING);
+        if (!imageData) throw new Error(values.ERROR.IMAGE_DATA_MISSING);
 
         const imageWritePath = `${paths.USER_IMAGES_DIRECTORY_PATH}/${loggedInUserId}.jpg`;
 
-        return fileStorageUtils.write(imageWritePath, userData[values.JD.IMAGE_DATA]);
+        return fileStorageUtils.write(imageWritePath, imageData);
     }
 }
 
